@@ -15,13 +15,17 @@ overflow:hidden;
 font-family:sans-serif;
 }
 
-/* CONTENEDOR MOSCA */
+/* MOSCA CONTENEDOR */
 
 #mosca{
+
 position:absolute;
+
 top:60px;
 right:80px;
+
 opacity:0;
+
 }
 
 /* TEXTO */
@@ -29,6 +33,7 @@ opacity:0;
 #texto{
 
 position:absolute;
+
 top:0;
 right:0;
 
@@ -36,7 +41,7 @@ text-align:right;
 
 color:#ffffff;
 
-font-size:36px; /* más pequeño */
+font-size:34px;
 
 font-weight:bold;
 
@@ -55,6 +60,7 @@ filter:blur(20px);
 #logo{
 
 position:absolute;
+
 top:0;
 right:0;
 
@@ -153,8 +159,6 @@ function startMosca(){
 
 activo=true;
 
-/* reset visual */
-
 mosca.style.filter="blur(0)";
 mosca.style.opacity=0;
 
@@ -183,8 +187,10 @@ mosca.style.filter="blur(15px)";
 /* ABLY */
 
 const ably = new Ably.Realtime({
+
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
+
 });
 
 const channel = ably.channels.get("vmix-mosca");
