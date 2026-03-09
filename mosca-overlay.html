@@ -2,30 +2,30 @@
 <html>
 
 <head>
+
 <meta charset="UTF-8">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="mosca-style.css">
+
 <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+
 </head>
 
 <body>
 
-<div id="box">
+<div id="container">
 
-<div id="title">
-CIERRE DE VOTACIONES EN
-</div>
-
-<div id="counter">
-00:00:00
+<div id="textBox">
+ANÁLISIS DE RESULTADOS<br>
+ELECTORALES 2026
 </div>
 
 <div id="logoBox">
-<img src="assets/logo.png">
+<img src="assets/elecciones2026.png">
 </div>
 
 </div>
 
-<script src="timer.js"></script>
+<script src="mosca-animation.js"></script>
 
 <script>
 
@@ -34,21 +34,14 @@ key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
 });
 
-const channel = ably.channels.get("vmix-hora");
-
-ably.connection.on(state=>{
-console.log("Ably:",state.current);
-});
+const channel = ably.channels.get("vmix-mosca");
 
 channel.subscribe("control",(msg)=>{
 
-const data=msg.data;
+const data = msg.data;
 
-if(data.action==="on") startSystem();
-
-if(data.action==="off") stopSystem();
-
-if(data.action==="freq") updateFrequency(data.minutes);
+if(data.action==="on") startMosca();
+if(data.action==="off") stopMosca();
 
 });
 
