@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
 
 <style>
@@ -89,7 +88,7 @@ transform:translateX(26px);
 
 <div class="preview">
 
-<iframe src="overlay-mosca.html"></iframe>
+<iframe src="mosca-overlay.html"></iframe>
 
 </div>
 
@@ -108,10 +107,8 @@ transform:translateX(26px);
 <script>
 
 const ably=new Ably.Realtime({
-
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
-
 });
 
 const channel=ably.channels.get("vmix-mosca");
@@ -134,13 +131,13 @@ channel.publish("control",{action:"off"});
 
 function openOverlay(){
 
-window.open("overlay-mosca.html");
+window.open("mosca-overlay.html");
 
 }
 
 function copyOverlay(){
 
-const url=location.origin+location.pathname.replace("control-mosca.html","overlay-mosca.html");
+const url = location.origin + "/mosca-analisis/mosca-overlay.html";
 
 navigator.clipboard.writeText(url);
 
