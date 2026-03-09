@@ -25,6 +25,7 @@ top:70px;
 right:80px;
 width:600px;
 opacity:0;
+filter:blur(20px);
 }
 
 /* TEXTO */
@@ -47,9 +48,8 @@ line-height:1.1;
 
 text-shadow:6px 6px 12px rgba(0,0,0,.8);
 
-filter:blur(20px);
-
 opacity:0;
+filter:blur(20px);
 
 }
 
@@ -63,14 +63,13 @@ top:0;
 right:0;
 
 opacity:0;
-
 filter:blur(20px);
 
 }
 
 #logo img{
 
-height:120px; /* logo más pequeño */
+height:120px;
 
 }
 
@@ -100,12 +99,9 @@ const texto = document.getElementById("texto");
 const logo = document.getElementById("logo");
 
 let activo=false;
-
-/* GUARDAMOS TODOS LOS TIMERS */
-
 let timers=[];
 
-/* LIMPIAR TODOS LOS TIMERS */
+/* limpiar timers */
 
 function clearTimers(){
 
@@ -114,14 +110,16 @@ timers=[];
 
 }
 
-/* RESET VISUAL */
+/* reset visual completo */
 
 function resetVisual(){
 
 mosca.style.transition="none";
+texto.style.transition="none";
+logo.style.transition="none";
 
 mosca.style.opacity=0;
-mosca.style.filter="blur(0)";
+mosca.style.filter="blur(20px)";
 
 texto.style.opacity=0;
 texto.style.filter="blur(20px)";
@@ -132,32 +130,35 @@ logo.style.transform="translateX(0)";
 
 }
 
-/* ANIMACIÓN */
+/* animación */
 
 function runAnim(){
 
 if(!activo) return;
 
-resetVisual();
+/* entrada desenfocada */
+
+mosca.style.transition="all .8s ease";
 
 mosca.style.opacity=1;
+mosca.style.filter="blur(0)";
 
-/* TEXTO ENTRA */
-
-texto.style.transition="all 1s ease";
+/* TEXTO */
 
 timers.push(setTimeout(()=>{
 
-texto.style.filter="blur(0)";
-texto.style.opacity="1";
+texto.style.transition="all 1s ease";
 
-},50));
+texto.style.opacity=1;
+texto.style.filter="blur(0)";
+
+},200));
 
 /* TEXTO SALE */
 
 timers.push(setTimeout(()=>{
 
-texto.style.opacity="0";
+texto.style.opacity=0;
 texto.style.filter="blur(20px)";
 
 },15000));
@@ -168,7 +169,7 @@ timers.push(setTimeout(()=>{
 
 logo.style.transition="all 1s ease";
 
-logo.style.opacity="1";
+logo.style.opacity=1;
 logo.style.filter="blur(0)";
 
 },17000));
@@ -177,13 +178,13 @@ logo.style.filter="blur(0)";
 
 timers.push(setTimeout(()=>{
 
-logo.style.opacity="0";
+logo.style.opacity=0;
 logo.style.filter="blur(20px)";
 logo.style.transform="translateX(120px)";
 
 },33000));
 
-/* REPETIR EN 4 MIN */
+/* repetir ciclo */
 
 timers.push(setTimeout(()=>{
 
@@ -193,29 +194,35 @@ runAnim();
 
 }
 
-/* ENCENDER */
+/* ON */
 
 function startMosca(){
-
-if(activo) return;
 
 activo=true;
 
 clearTimers();
 
+/* reinicio total */
+
+resetVisual();
+
+/* pequeño delay para asegurar render */
+
+setTimeout(()=>{
+
 runAnim();
+
+},50);
 
 }
 
-/* APAGAR */
+/* OFF */
 
 function stopMosca(){
 
 activo=false;
 
 clearTimers();
-
-/* salida suave */
 
 mosca.style.transition="all .8s ease";
 
