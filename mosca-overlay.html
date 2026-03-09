@@ -20,6 +20,7 @@ font-family:sans-serif;
 #mosca{
 
 position:absolute;
+
 top:60px;
 right:80px;
 
@@ -34,6 +35,7 @@ opacity:0;
 #texto{
 
 color:white;
+
 font-size:44px;
 font-weight:bold;
 
@@ -81,7 +83,7 @@ ELECTORALES 2026
 </div>
 
 <div id="logo">
-<img src="assets/elecciones2026.png">
+<img src="assets/logo.png">
 </div>
 
 </div>
@@ -106,6 +108,7 @@ mosca.style.opacity=1;
 /* TEXTO ENTRA */
 
 texto.style.transition="all 1.2s";
+
 texto.style.filter="blur(0)";
 texto.style.opacity=".5";
 
@@ -139,7 +142,7 @@ logo.style.transform="translateX(120px)";
 
 },33000);
 
-/* REPETICION */
+/* REPETIR EN 4 MINUTOS */
 
 ciclo=setTimeout(runAnim,240000);
 
@@ -148,6 +151,14 @@ ciclo=setTimeout(runAnim,240000);
 function startMosca(){
 
 activo=true;
+
+/* reset visual */
+
+mosca.style.filter="blur(0)";
+mosca.style.opacity=0;
+
+texto.style.opacity=0;
+logo.style.opacity=0;
 
 runAnim();
 
@@ -159,9 +170,12 @@ activo=false;
 
 clearTimeout(ciclo);
 
-mosca.style.transition="opacity .5s";
+/* fade + blur */
+
+mosca.style.transition="all .8s";
 
 mosca.style.opacity=0;
+mosca.style.filter="blur(15px)";
 
 }
 
