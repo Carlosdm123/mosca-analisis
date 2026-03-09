@@ -15,22 +15,26 @@ overflow:hidden;
 font-family:sans-serif;
 }
 
-/* CONTENEDOR MOSCA */
+/* CONTENEDOR */
 
 #mosca{
+
 position:absolute;
+
 top:60px;
 right:80px;
+
+width:520px;   /* ancho fijo evita saltos de línea */
+
 opacity:0;
+
 }
 
 /* TEXTO */
 
 #texto{
 
-position:absolute;
-top:0;
-right:0;
+width:520px;
 
 text-align:right;
 
@@ -44,8 +48,6 @@ text-transform:uppercase;
 
 line-height:1.1;
 
-white-space:nowrap;   /* evita que se parta en más líneas */
-
 text-shadow:6px 6px 12px rgba(0,0,0,.8);
 
 filter:blur(20px);
@@ -57,6 +59,7 @@ filter:blur(20px);
 #logo{
 
 position:absolute;
+
 top:0;
 right:0;
 
@@ -68,7 +71,7 @@ filter:blur(20px);
 
 #logo img{
 
-height:180px;   /* logo mucho más grande */
+height:140px;
 
 }
 
@@ -81,8 +84,8 @@ height:180px;   /* logo mucho más grande */
 <div id="mosca">
 
 <div id="texto">
-ANÁLISIS&nbsp;DE&nbsp;RESULTADOS<br>
-ELECTORALES&nbsp;2026
+ANÁLISIS DE RESULTADOS<br>
+ELECTORALES 2026
 </div>
 
 <div id="logo">
@@ -100,7 +103,7 @@ const logo = document.getElementById("logo");
 let activo=false;
 let ciclo=null;
 
-/* ---------- BLOQUE ANIMADO ---------- */
+/* ANIMACIÓN */
 
 function runAnim(){
 
@@ -110,7 +113,7 @@ mosca.style.opacity=1;
 
 /* TEXTO ENTRA */
 
-texto.style.transition="all 1s ease";
+texto.style.transition="all 1s";
 
 texto.style.filter="blur(0)";
 texto.style.opacity="1";
@@ -128,7 +131,7 @@ texto.style.filter="blur(20px)";
 
 setTimeout(()=>{
 
-logo.style.transition="all 1s ease";
+logo.style.transition="all 1s";
 
 logo.style.opacity="1";
 logo.style.filter="blur(0)";
@@ -145,13 +148,11 @@ logo.style.transform="translateX(120px)";
 
 },33000);
 
-/* REPETIR CADA 4 MIN */
+/* REPETIR EN 4 MIN */
 
 ciclo=setTimeout(runAnim,240000);
 
 }
-
-/* ---------- CONTROL ---------- */
 
 function startMosca(){
 
@@ -161,7 +162,6 @@ activo=true;
 
 /* reset */
 
-mosca.style.filter="blur(0)";
 mosca.style.opacity=0;
 
 texto.style.opacity=0;
@@ -186,16 +186,16 @@ mosca.style.filter="blur(15px)";
 
 }
 
-/* ---------- ABLY ---------- */
+/* ABLY */
 
 const ably = new Ably.Realtime({
+
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
+
 });
 
 const channel = ably.channels.get("vmix-mosca");
-
-/* LISTO DESDE QUE CARGA */
 
 channel.subscribe("control",(msg)=>{
 
