@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
 
 <style>
@@ -16,12 +15,11 @@ overflow:hidden;
 font-family:sans-serif;
 }
 
-/* CONTENEDOR SUPERIOR DERECHA */
+/* MOSCA SUPERIOR DERECHA */
 
 #mosca{
 
 position:absolute;
-
 top:60px;
 right:80px;
 
@@ -36,9 +34,7 @@ opacity:0;
 #texto{
 
 color:white;
-
-font-size:42px;
-
+font-size:44px;
 font-weight:bold;
 
 text-transform:uppercase;
@@ -47,7 +43,7 @@ line-height:1.2;
 
 opacity:.5;
 
-text-shadow:6px 6px 12px rgba(0,0,0,.7);
+text-shadow:6px 6px 12px rgba(0,0,0,.8);
 
 filter:blur(20px);
 
@@ -99,40 +95,37 @@ const logo = document.getElementById("logo");
 let activo=false;
 let ciclo=null;
 
-/* -------- BLOQUE DE 33s -------- */
+/* BLOQUE ANIMADO */
 
-function animacion(){
+function runAnim(){
 
 if(!activo) return;
 
 mosca.style.opacity=1;
 
-/* ENTRA TEXTO */
+/* TEXTO ENTRA */
 
-texto.style.transition="all 1.2s ease";
-
-texto.style.filter="blur(0px)";
+texto.style.transition="all 1.2s";
+texto.style.filter="blur(0)";
 texto.style.opacity=".5";
 
-/* TEXTO SALE A LOS 15s */
+/* TEXTO SALE */
 
 setTimeout(()=>{
 
-texto.style.transition="all 1s";
-
 texto.style.opacity="0";
-texto.style.filter="blur(15px)";
+texto.style.filter="blur(20px)";
 
 },15000);
 
-/* ENTRA LOGO */
+/* LOGO ENTRA */
 
 setTimeout(()=>{
 
-logo.style.transition="all 1.2s ease";
+logo.style.transition="all 1.2s";
 
 logo.style.opacity="1";
-logo.style.filter="blur(0px)";
+logo.style.filter="blur(0)";
 
 },17000);
 
@@ -140,29 +133,23 @@ logo.style.filter="blur(0px)";
 
 setTimeout(()=>{
 
-logo.style.transition="all 1s";
-
 logo.style.opacity="0";
-logo.style.filter="blur(15px)";
+logo.style.filter="blur(20px)";
 logo.style.transform="translateX(120px)";
 
 },33000);
 
-/* REPETIR EN 4 MIN */
+/* REPETICION */
 
-ciclo=setTimeout(animacion,240000);
+ciclo=setTimeout(runAnim,240000);
 
 }
 
-/* -------- CONTROL -------- */
-
 function startMosca(){
-
-if(activo) return;
 
 activo=true;
 
-animacion();
+runAnim();
 
 }
 
@@ -172,11 +159,13 @@ activo=false;
 
 clearTimeout(ciclo);
 
+mosca.style.transition="opacity .5s";
+
 mosca.style.opacity=0;
 
 }
 
-/* -------- ABLY -------- */
+/* ABLY */
 
 const ably = new Ably.Realtime({
 
