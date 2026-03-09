@@ -18,55 +18,36 @@ font-family:sans-serif;
 /* MOSCA SUPERIOR DERECHA */
 
 #mosca{
-
 position:absolute;
-
 top:60px;
 right:80px;
-
 text-align:right;
-
 opacity:0;
-
 }
 
 /* TEXTO */
 
 #texto{
-
 color:white;
-
 font-size:44px;
 font-weight:bold;
-
 text-transform:uppercase;
-
 line-height:1.2;
-
 opacity:.5;
-
 text-shadow:6px 6px 12px rgba(0,0,0,.8);
-
 filter:blur(20px);
-
 }
 
 /* LOGO */
 
 #logo{
-
 margin-top:10px;
-
 opacity:0;
-
 filter:blur(20px);
-
 }
 
 #logo img{
-
 height:90px;
-
 }
 
 </style>
@@ -108,7 +89,6 @@ mosca.style.opacity=1;
 /* TEXTO ENTRA */
 
 texto.style.transition="all 1.2s";
-
 texto.style.filter="blur(0)";
 texto.style.opacity=".5";
 
@@ -126,7 +106,6 @@ texto.style.filter="blur(20px)";
 setTimeout(()=>{
 
 logo.style.transition="all 1.2s";
-
 logo.style.opacity="1";
 logo.style.filter="blur(0)";
 
@@ -142,7 +121,7 @@ logo.style.transform="translateX(120px)";
 
 },33000);
 
-/* REPETIR EN 4 MINUTOS */
+/* REPETIR CADA 4 MINUTOS */
 
 ciclo=setTimeout(runAnim,240000);
 
@@ -152,7 +131,7 @@ function startMosca(){
 
 activo=true;
 
-/* reset visual */
+/* reset */
 
 mosca.style.filter="blur(0)";
 mosca.style.opacity=0;
@@ -173,7 +152,6 @@ clearTimeout(ciclo);
 /* fade + blur */
 
 mosca.style.transition="all .8s";
-
 mosca.style.opacity=0;
 mosca.style.filter="blur(15px)";
 
@@ -182,10 +160,8 @@ mosca.style.filter="blur(15px)";
 /* ABLY */
 
 const ably = new Ably.Realtime({
-
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
-
 });
 
 const channel = ably.channels.get("vmix-mosca");
