@@ -33,19 +33,22 @@ transform-origin:top left;
 border:none;
 }
 
-.switch{
+button{
+margin:10px;
+padding:8px 14px;
+cursor:pointer;
+}
 
+.switch{
 position:relative;
 display:inline-block;
 width:60px;
 height:34px;
-
 }
 
 .switch input{display:none;}
 
 .slider{
-
 position:absolute;
 cursor:pointer;
 top:0;
@@ -54,11 +57,9 @@ right:0;
 bottom:0;
 background:#555;
 border-radius:34px;
-
 }
 
 .slider:before{
-
 content:"";
 position:absolute;
 height:26px;
@@ -68,19 +69,14 @@ bottom:4px;
 background:white;
 border-radius:50%;
 transition:.4s;
-
 }
 
 input:checked + .slider{
-
 background:#2c8f6b;
-
 }
 
 input:checked + .slider:before{
-
 transform:translateX(26px);
-
 }
 
 </style>
@@ -89,31 +85,29 @@ transform:translateX(26px);
 
 <body>
 
-<h2>MOSCA ELECCIONES 2026</h2>
+<h2>MOSCA ANÁLISIS ELECTORAL</h2>
 
 <div class="preview">
-
 <iframe src="mosca-overlay.html"></iframe>
-
 </div>
 
 <br>
 
+<button onclick="openOverlay()">Abrir overlay</button>
+<button onclick="copyOverlay()">Copiar link overlay</button>
+
+<br><br>
+
 <label class="switch">
-
 <input type="checkbox" id="toggle">
-
 <span class="slider"></span>
-
 </label>
 
 <script>
 
 const ably=new Ably.Realtime({
-
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
-
 });
 
 const channel=ably.channels.get("vmix-mosca");
@@ -133,6 +127,22 @@ channel.publish("control",{action:"off"});
 }
 
 });
+
+function openOverlay(){
+
+window.open("mosca-overlay.html");
+
+}
+
+function copyOverlay(){
+
+const url=location.origin+location.pathname.replace("mosca-control.html","mosca-overlay.html");
+
+navigator.clipboard.writeText(url);
+
+alert("Link del overlay copiado");
+
+}
 
 </script>
 
