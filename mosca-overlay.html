@@ -15,17 +15,13 @@ overflow:hidden;
 font-family:sans-serif;
 }
 
-/* MOSCA CONTENEDOR */
+/* CONTENEDOR MOSCA */
 
 #mosca{
-
 position:absolute;
-
 top:60px;
 right:80px;
-
 opacity:0;
-
 }
 
 /* TEXTO */
@@ -33,7 +29,6 @@ opacity:0;
 #texto{
 
 position:absolute;
-
 top:0;
 right:0;
 
@@ -60,7 +55,6 @@ filter:blur(20px);
 #logo{
 
 position:absolute;
-
 top:0;
 right:0;
 
@@ -90,7 +84,7 @@ ELECTORALES 2026
 </div>
 
 <div id="logo">
-<img src="assets/logo.png">
+<img src="assets/logo1.png">
 </div>
 
 </div>
@@ -159,6 +153,8 @@ function startMosca(){
 
 activo=true;
 
+/* reset visual */
+
 mosca.style.filter="blur(0)";
 mosca.style.opacity=0;
 
@@ -180,7 +176,7 @@ clearTimeout(ciclo);
 mosca.style.transition="all .8s";
 
 mosca.style.opacity=0;
-mosca.style.filter="blur(15px)";
+mosca.style.filter="blur(15px);
 
 }
 
