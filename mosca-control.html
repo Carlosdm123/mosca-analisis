@@ -89,7 +89,7 @@ transform:translateX(26px);
 
 <div class="preview">
 
-<iframe src="mosca-overlay.html"></iframe>
+<iframe src="overlay-mosca.html"></iframe>
 
 </div>
 
@@ -134,17 +134,17 @@ channel.publish("control",{action:"off"});
 
 function openOverlay(){
 
-window.open("mosca-overlay.html");
+window.open("overlay-mosca.html");
 
 }
 
 function copyOverlay(){
 
-const url=location.origin+location.pathname.replace("mosca-control.html","mosca-overlay.html");
+const url=location.origin+location.pathname.replace("control-mosca.html","overlay-mosca.html");
 
 navigator.clipboard.writeText(url);
 
-alert("Link del overlay copiado");
+alert("Link copiado");
 
 }
 
