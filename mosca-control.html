@@ -88,7 +88,9 @@ transform:translateX(26px);
 <h2>MOSCA ANÁLISIS ELECTORAL</h2>
 
 <div class="preview">
+
 <iframe src="mosca-overlay.html"></iframe>
+
 </div>
 
 <br>
@@ -106,8 +108,10 @@ transform:translateX(26px);
 <script>
 
 const ably=new Ably.Realtime({
+
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
+
 });
 
 const channel=ably.channels.get("vmix-mosca");
