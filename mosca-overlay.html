@@ -4,44 +4,195 @@
 <head>
 
 <meta charset="UTF-8">
-<link rel="stylesheet" href="mosca-style.css">
 
 <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+
+<style>
+
+body{
+margin:0;
+background:transparent;
+overflow:hidden;
+font-family:sans-serif;
+}
+
+/* CONTENEDOR SUPERIOR DERECHA */
+
+#mosca{
+
+position:absolute;
+
+top:60px;
+right:80px;
+
+text-align:right;
+
+opacity:0;
+
+}
+
+/* TEXTO */
+
+#texto{
+
+color:white;
+
+font-size:42px;
+
+font-weight:bold;
+
+text-transform:uppercase;
+
+line-height:1.2;
+
+opacity:.5;
+
+text-shadow:6px 6px 12px rgba(0,0,0,.7);
+
+filter:blur(20px);
+
+}
+
+/* LOGO */
+
+#logo{
+
+margin-top:10px;
+
+opacity:0;
+
+filter:blur(20px);
+
+}
+
+#logo img{
+
+height:90px;
+
+}
+
+</style>
 
 </head>
 
 <body>
 
-<div id="container">
+<div id="mosca">
 
-<div id="textBox">
+<div id="texto">
 ANÁLISIS DE RESULTADOS<br>
 ELECTORALES 2026
 </div>
 
-<div id="logoBox">
+<div id="logo">
 <img src="assets/elecciones2026.png">
 </div>
 
 </div>
 
-<script src="mosca-animation.js"></script>
-
 <script>
 
+const mosca = document.getElementById("mosca");
+const texto = document.getElementById("texto");
+const logo = document.getElementById("logo");
+
+let activo=false;
+let ciclo=null;
+
+/* -------- BLOQUE DE 33s -------- */
+
+function animacion(){
+
+if(!activo) return;
+
+mosca.style.opacity=1;
+
+/* ENTRA TEXTO */
+
+texto.style.transition="all 1.2s ease";
+
+texto.style.filter="blur(0px)";
+texto.style.opacity=".5";
+
+/* TEXTO SALE A LOS 15s */
+
+setTimeout(()=>{
+
+texto.style.transition="all 1s";
+
+texto.style.opacity="0";
+texto.style.filter="blur(15px)";
+
+},15000);
+
+/* ENTRA LOGO */
+
+setTimeout(()=>{
+
+logo.style.transition="all 1.2s ease";
+
+logo.style.opacity="1";
+logo.style.filter="blur(0px)";
+
+},17000);
+
+/* LOGO SALE */
+
+setTimeout(()=>{
+
+logo.style.transition="all 1s";
+
+logo.style.opacity="0";
+logo.style.filter="blur(15px)";
+logo.style.transform="translateX(120px)";
+
+},33000);
+
+/* REPETIR EN 4 MIN */
+
+ciclo=setTimeout(animacion,240000);
+
+}
+
+/* -------- CONTROL -------- */
+
+function startMosca(){
+
+if(activo) return;
+
+activo=true;
+
+animacion();
+
+}
+
+function stopMosca(){
+
+activo=false;
+
+clearTimeout(ciclo);
+
+mosca.style.opacity=0;
+
+}
+
+/* -------- ABLY -------- */
+
 const ably = new Ably.Realtime({
+
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
+
 });
 
 const channel = ably.channels.get("vmix-mosca");
 
 channel.subscribe("control",(msg)=>{
 
-const data = msg.data;
+const d=msg.data;
 
-if(data.action==="on") startMosca();
-if(data.action==="off") stopMosca();
+if(d.action==="on") startMosca();
+if(d.action==="off") stopMosca();
 
 });
 
