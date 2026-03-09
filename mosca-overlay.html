@@ -70,7 +70,7 @@ filter:blur(20px);
 
 #logo img{
 
-height:130px;   /* logo más pequeño */
+height:120px; /* logo más pequeño */
 
 }
 
@@ -100,30 +100,45 @@ const texto = document.getElementById("texto");
 const logo = document.getElementById("logo");
 
 let activo=false;
-let ciclo=null;
+
+/* GUARDAMOS TODOS LOS TIMERS */
+
+let timers=[];
+
+/* LIMPIAR TODOS LOS TIMERS */
+
+function clearTimers(){
+
+timers.forEach(t=>clearTimeout(t));
+timers=[];
+
+}
+
+/* RESET VISUAL */
 
 function resetVisual(){
 
-/* limpia todo el blur */
+mosca.style.transition="none";
 
-mosca.style.filter="blur(0)";
 mosca.style.opacity=0;
+mosca.style.filter="blur(0)";
 
-texto.style.filter="blur(20px)";
 texto.style.opacity=0;
+texto.style.filter="blur(20px)";
 
-logo.style.filter="blur(20px)";
 logo.style.opacity=0;
-
+logo.style.filter="blur(20px)";
 logo.style.transform="translateX(0)";
 
 }
 
-/* BLOQUE ANIMADO */
+/* ANIMACIÓN */
 
 function runAnim(){
 
 if(!activo) return;
+
+resetVisual();
 
 mosca.style.opacity=1;
 
@@ -131,74 +146,78 @@ mosca.style.opacity=1;
 
 texto.style.transition="all 1s ease";
 
+timers.push(setTimeout(()=>{
+
 texto.style.filter="blur(0)";
 texto.style.opacity="1";
 
+},50));
+
 /* TEXTO SALE */
 
-setTimeout(()=>{
+timers.push(setTimeout(()=>{
 
 texto.style.opacity="0";
 texto.style.filter="blur(20px)";
 
-},15000);
+},15000));
 
 /* LOGO ENTRA */
 
-setTimeout(()=>{
+timers.push(setTimeout(()=>{
 
 logo.style.transition="all 1s ease";
 
 logo.style.opacity="1";
 logo.style.filter="blur(0)";
 
-},17000);
+},17000));
 
 /* LOGO SALE */
 
-setTimeout(()=>{
+timers.push(setTimeout(()=>{
 
 logo.style.opacity="0";
 logo.style.filter="blur(20px)";
 logo.style.transform="translateX(120px)";
 
-},33000);
+},33000));
 
-/* REPETIR CADA 4 MIN */
+/* REPETIR EN 4 MIN */
 
-ciclo=setTimeout(runAnim,240000);
-
-}
-
-function startMosca(){
-
-activo=true;
-
-clearTimeout(ciclo);
-
-/* RESET COMPLETO */
-
-resetVisual();
-
-/* pequeño delay para asegurar render limpio */
-
-setTimeout(()=>{
+timers.push(setTimeout(()=>{
 
 runAnim();
 
-},20);
+},240000));
 
 }
+
+/* ENCENDER */
+
+function startMosca(){
+
+if(activo) return;
+
+activo=true;
+
+clearTimers();
+
+runAnim();
+
+}
+
+/* APAGAR */
 
 function stopMosca(){
 
 activo=false;
 
-clearTimeout(ciclo);
+clearTimers();
 
-/* salida con blur */
+/* salida suave */
 
-mosca.style.transition="all .8s";
+mosca.style.transition="all .8s ease";
 
 mosca.style.opacity=0;
 mosca.style.filter="blur(15px)";
