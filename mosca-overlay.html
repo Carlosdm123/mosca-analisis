@@ -17,8 +17,6 @@ background:transparent;
 font-family:sans-serif;
 }
 
-/* CONTENEDOR */
-
 #mosca{
 
 position:absolute;
@@ -31,8 +29,6 @@ width:600px;
 opacity:0;
 
 }
-
-/* TEXTO */
 
 #texto{
 
@@ -56,8 +52,6 @@ filter:blur(20px);
 
 }
 
-/* LOGO */
-
 #logo{
 
 position:absolute;
@@ -73,7 +67,7 @@ filter:blur(20px);
 
 #logo img{
 
-height:170px;
+height:150px;   /* antes 170 */
 
 }
 
@@ -111,14 +105,9 @@ if(!activo) return;
 
 mosca.style.opacity=1;
 
-/* TEXTO ENTRA */
-
 texto.style.transition="all 1s";
-
 texto.style.filter="blur(0)";
 texto.style.opacity="1";
-
-/* TEXTO SALE */
 
 setTimeout(()=>{
 
@@ -126,8 +115,6 @@ texto.style.opacity="0";
 texto.style.filter="blur(20px)";
 
 },15000);
-
-/* LOGO ENTRA */
 
 setTimeout(()=>{
 
@@ -138,8 +125,6 @@ logo.style.filter="blur(0)";
 
 },17000);
 
-/* LOGO SALE */
-
 setTimeout(()=>{
 
 logo.style.opacity="0";
@@ -147,8 +132,6 @@ logo.style.filter="blur(20px)";
 logo.style.transform="translateX(120px)";
 
 },33000);
-
-/* REPETIR CADA 4 MINUTOS */
 
 ciclo=setTimeout(runAnim,240000);
 
@@ -182,13 +165,9 @@ mosca.style.filter="blur(15px)";
 
 }
 
-/* ABLY */
-
 const ably = new Ably.Realtime({
-
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
-
 });
 
 const channel = ably.channels.get("vmix-mosca");
