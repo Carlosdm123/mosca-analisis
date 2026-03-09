@@ -9,20 +9,18 @@
 <style>
 
 body{
+
 font-family:sans-serif;
 background:#111;
 color:white;
-margin:40px;
-}
 
-/* SWITCH */
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
 
-button{
-
-font-size:20px;
-padding:12px 30px;
-margin-right:10px;
-cursor:pointer;
+height:100vh;
+margin:0;
 
 }
 
@@ -39,7 +37,7 @@ overflow:hidden;
 
 position:relative;
 
-margin-top:20px;
+margin-bottom:40px;
 
 }
 
@@ -57,19 +55,96 @@ transform-origin:top left;
 
 }
 
+/* SWITCH */
+
+.switch{
+
+position:relative;
+
+display:inline-block;
+
+width:70px;
+height:34px;
+
+}
+
+.switch input{
+opacity:0;
+width:0;
+height:0;
+}
+
+.slider{
+
+position:absolute;
+cursor:pointer;
+top:0;
+left:0;
+right:0;
+bottom:0;
+
+background-color:#444;
+
+transition:.3s;
+
+border-radius:34px;
+
+}
+
+.slider:before{
+
+position:absolute;
+content:"";
+
+height:26px;
+width:26px;
+
+left:4px;
+bottom:4px;
+
+background:white;
+
+transition:.3s;
+
+border-radius:50%;
+
+}
+
+input:checked + .slider{
+
+background:#00c853;
+
+}
+
+input:checked + .slider:before{
+
+transform:translateX(36px);
+
+}
+
+/* BOTONES */
+
+.controls{
+
+display:flex;
+gap:20px;
+align-items:center;
+
+}
+
+button{
+
+font-size:16px;
+padding:10px 18px;
+cursor:pointer;
+
+}
+
 </style>
 
 </head>
 
 <body>
-
-<h2>MOSCA ANÁLISIS</h2>
-
-<button onclick="encender()">ON</button>
-<button onclick="apagar()">OFF</button>
-
-<button onclick="abrirOverlay()">VER OVERLAY</button>
-<button onclick="copiarLink()">COPIAR LINK</button>
 
 <div id="preview">
 
@@ -77,27 +152,41 @@ transform-origin:top left;
 
 </div>
 
+<div class="controls">
+
+<label class="switch">
+<input type="checkbox" id="toggle">
+<span class="slider"></span>
+</label>
+
+<button onclick="abrirOverlay()">Ver Overlay</button>
+<button onclick="copiarLink()">Copiar Link</button>
+
+</div>
+
 <script>
 
 const ably = new Ably.Realtime({
-
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4"
-
 });
 
 const channel = ably.channels.get("vmix-mosca");
 
-function encender(){
+const toggle=document.getElementById("toggle");
+
+toggle.addEventListener("change",()=>{
+
+if(toggle.checked){
 
 channel.publish("control",{action:"on"});
 
-}
-
-function apagar(){
+}else{
 
 channel.publish("control",{action:"off"});
 
 }
+
+});
 
 function abrirOverlay(){
 
