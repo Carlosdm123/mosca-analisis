@@ -36,13 +36,15 @@ text-align:right;
 
 color:#ffffff;
 
-font-size:34px;
+font-size:36px;
 
 font-weight:bold;
 
 text-transform:uppercase;
 
-line-height:1.15;
+line-height:1.1;
+
+white-space:nowrap;   /* evita que se parta en más líneas */
 
 text-shadow:6px 6px 12px rgba(0,0,0,.8);
 
@@ -66,7 +68,7 @@ filter:blur(20px);
 
 #logo img{
 
-height:120px;   /* LOGO MÁS GRANDE */
+height:180px;   /* logo mucho más grande */
 
 }
 
@@ -79,8 +81,8 @@ height:120px;   /* LOGO MÁS GRANDE */
 <div id="mosca">
 
 <div id="texto">
-ANÁLISIS DE RESULTADOS<br>
-ELECTORALES 2026
+ANÁLISIS&nbsp;DE&nbsp;RESULTADOS<br>
+ELECTORALES&nbsp;2026
 </div>
 
 <div id="logo">
@@ -98,7 +100,7 @@ const logo = document.getElementById("logo");
 let activo=false;
 let ciclo=null;
 
-/* BLOQUE ANIMADO */
+/* ---------- BLOQUE ANIMADO ---------- */
 
 function runAnim(){
 
@@ -108,7 +110,7 @@ mosca.style.opacity=1;
 
 /* TEXTO ENTRA */
 
-texto.style.transition="all 1.2s";
+texto.style.transition="all 1s ease";
 
 texto.style.filter="blur(0)";
 texto.style.opacity="1";
@@ -126,7 +128,7 @@ texto.style.filter="blur(20px)";
 
 setTimeout(()=>{
 
-logo.style.transition="all 1.2s";
+logo.style.transition="all 1s ease";
 
 logo.style.opacity="1";
 logo.style.filter="blur(0)";
@@ -143,17 +145,21 @@ logo.style.transform="translateX(120px)";
 
 },33000);
 
-/* REPETIR CADA 4 MINUTOS */
+/* REPETIR CADA 4 MIN */
 
 ciclo=setTimeout(runAnim,240000);
 
 }
 
+/* ---------- CONTROL ---------- */
+
 function startMosca(){
+
+if(activo) return;
 
 activo=true;
 
-/* reset visual */
+/* reset */
 
 mosca.style.filter="blur(0)";
 mosca.style.opacity=0;
@@ -180,16 +186,16 @@ mosca.style.filter="blur(15px)";
 
 }
 
-/* ABLY */
+/* ---------- ABLY ---------- */
 
 const ably = new Ably.Realtime({
-
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
-
 });
 
 const channel = ably.channels.get("vmix-mosca");
+
+/* LISTO DESDE QUE CARGA */
 
 channel.subscribe("control",(msg)=>{
 
