@@ -129,15 +129,19 @@ channel.publish("control",{action:"off"});
 
 });
 
+/* abrir overlay */
+
 function openOverlay(){
 
 window.open("mosca-overlay.html");
 
 }
 
+/* copiar link correcto */
+
 function copyOverlay(){
 
-const url = location.origin + "/mosca-analisis/mosca-overlay.html";
+const url="https://carlosdm123.github.io/mosca-analisis/mosca-overlay.html";
 
 navigator.clipboard.writeText(url);
 
