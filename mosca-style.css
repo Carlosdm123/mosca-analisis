@@ -10,9 +10,9 @@ font-family:sans-serif;
 /* CONTROLES DEL TICKER */
 
 :root{
---ticker-right: 0px;
---ticker-width: 200px;
---ticker-height: 35px;
+--ticker-right: 10px;
+--ticker-width: 230px;
+--ticker-height: 31px;
 }
 
 /* CONTENEDOR */
