@@ -10,7 +10,7 @@ font-family:sans-serif;
 /* CONTROLES DEL TICKER */
 
 :root{
---ticker-right: 23px;
+--ticker-right: 26px;
 --ticker-width: 230px;
 --ticker-height: 31px;
 }
