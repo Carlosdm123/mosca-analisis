@@ -4,109 +4,8 @@
 <head>
 
 <meta charset="UTF-8">
+<link rel="stylesheet" href="mosca-style.css">
 <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
-
-<style>
-
-body{
-margin:0;
-width:1920px;
-height:1080px;
-overflow:hidden;
-background:transparent;
-font-family:sans-serif;
-}
-
-/* CONTENEDOR */
-
-#mosca{
-position:absolute;
-top:70px;
-right:80px;
-width:600px;
-opacity:0;
-filter:blur(20px);
-}
-
-/* TEXTO */
-
-#texto{
-
-width:600px;
-
-text-align:right;
-
-color:#ffffff;
-
-font-size:44px;
-
-font-weight:bold;
-
-text-transform:uppercase;
-
-line-height:1.1;
-
-text-shadow:6px 6px 12px rgba(0,0,0,.8);
-
-opacity:0;
-filter:blur(20px);
-
-}
-
-/* LOGO */
-
-#logo{
-
-position:absolute;
-
-top:0;
-right:0;
-
-opacity:0;
-filter:blur(20px);
-
-display:flex;
-flex-direction:column;
-align-items:flex-end;
-
-}
-
-#logo img{
-height:120px;
-}
-
-/* TICKER TEXTO */
-
-#ticker span{
-
-white-space:nowrap;
-
-font-size:16px;
-font-weight:bold;
-
-color:black;
-
-padding-left:10px;
-
-animation:tickerMove 12s linear infinite;
-
-}
-
-/* ANIMACION */
-
-@keyframes tickerMove{
-
-0%{
-transform:translateX(200px);
-}
-
-100%{
-transform:translateX(-100%);
-}
-
-}
-
-</style>
 
 </head>
 
@@ -123,13 +22,8 @@ ELECTORALES 2026
 
 <img src="assets/logo1.png">
 
-<!-- TICKER -->
-
-<div id="ticker"
-style="width:200px;height:35px;background:white;overflow:hidden;display:flex;align-items:center;margin-top:6px;">
-
+<div id="ticker">
 <span>WWW.ELESPECTADOR.COM</span>
-
 </div>
 
 </div>
@@ -227,9 +121,7 @@ clearTimers();
 resetVisual();
 
 setTimeout(()=>{
-
 runAnim();
-
 },50);
 
 }
@@ -241,7 +133,6 @@ activo=false;
 clearTimers();
 
 mosca.style.transition="all .8s ease";
-
 mosca.style.opacity=0;
 mosca.style.filter="blur(15px)";
 
@@ -250,10 +141,8 @@ mosca.style.filter="blur(15px)";
 /* ABLY */
 
 const ably = new Ably.Realtime({
-
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
 recover:true
-
 });
 
 const channel = ably.channels.get("vmix-mosca");
