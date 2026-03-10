@@ -8,8 +8,6 @@
 
 <style>
 
-/* BODY */
-
 body{
 margin:0;
 width:1920px;
@@ -19,7 +17,7 @@ background:transparent;
 font-family:sans-serif;
 }
 
-/* CONTENEDOR MOSCA */
+/* CONTENEDOR */
 
 #mosca{
 position:absolute;
@@ -55,7 +53,7 @@ filter:blur(20px);
 
 }
 
-/* BLOQUE LOGO */
+/* LOGO */
 
 #logo{
 
@@ -73,59 +71,33 @@ align-items:flex-end;
 
 }
 
-/* IMAGEN LOGO */
-
 #logo img{
-
 height:120px;
-
 }
 
-/* TICKER */
-
-#ticker{
-
-width:calc(100% - 20px);
-
-height:60px;
-
-background:white;
-
-margin-top:4px;
-
-margin-right:10px;
-
-overflow:hidden;
-
-display:flex;
-align-items:center;
-
-padding:0 3px;
-
-}
-
-/* TEXTO DEL TICKER */
+/* TICKER TEXTO */
 
 #ticker span{
 
 white-space:nowrap;
 
-font-size:26px;
-
+font-size:16px;
 font-weight:bold;
 
 color:black;
 
-animation:tickerMove 8s linear infinite;
+padding-left:10px;
+
+animation:tickerMove 12s linear infinite;
 
 }
 
-/* ANIMACIÓN DEL TICKER */
+/* ANIMACION */
 
 @keyframes tickerMove{
 
 0%{
-transform:translateX(100%);
+transform:translateX(200px);
 }
 
 100%{
@@ -151,8 +123,13 @@ ELECTORALES 2026
 
 <img src="assets/logo1.png">
 
-<div id="ticker">
+<!-- TICKER -->
+
+<div id="ticker"
+style="width:200px;height:35px;background:white;overflow:hidden;display:flex;align-items:center;margin-top:6px;">
+
 <span>WWW.ELESPECTADOR.COM</span>
+
 </div>
 
 </div>
@@ -168,16 +145,10 @@ const logo = document.getElementById("logo");
 let activo=false;
 let timers=[];
 
-/* limpiar timers */
-
 function clearTimers(){
-
 timers.forEach(t=>clearTimeout(t));
 timers=[];
-
 }
-
-/* reset visual completo */
 
 function resetVisual(){
 
@@ -197,20 +168,14 @@ logo.style.transform="translateX(0)";
 
 }
 
-/* animación */
-
 function runAnim(){
 
 if(!activo) return;
-
-/* entrada desenfocada */
 
 mosca.style.transition="all .8s ease";
 
 mosca.style.opacity=1;
 mosca.style.filter="blur(0)";
-
-/* TEXTO ENTRA */
 
 timers.push(setTimeout(()=>{
 
@@ -221,16 +186,12 @@ texto.style.filter="blur(0)";
 
 },200));
 
-/* TEXTO SALE */
-
 timers.push(setTimeout(()=>{
 
 texto.style.opacity=0;
 texto.style.filter="blur(20px)";
 
 },15000));
-
-/* LOGO ENTRA */
 
 timers.push(setTimeout(()=>{
 
@@ -241,8 +202,6 @@ logo.style.filter="blur(0)";
 
 },17000));
 
-/* LOGO SALE */
-
 timers.push(setTimeout(()=>{
 
 logo.style.opacity=0;
@@ -251,8 +210,6 @@ logo.style.transform="translateX(120px)";
 
 },33000));
 
-/* repetir ciclo */
-
 timers.push(setTimeout(()=>{
 
 runAnim();
@@ -260,8 +217,6 @@ runAnim();
 },240000));
 
 }
-
-/* ON */
 
 function startMosca(){
 
@@ -278,8 +233,6 @@ runAnim();
 },50);
 
 }
-
-/* OFF */
 
 function stopMosca(){
 
