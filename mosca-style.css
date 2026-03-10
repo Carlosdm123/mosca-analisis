@@ -1,66 +1,61 @@
 body{
 margin:0;
+width:1920px;
+height:1080px;
+overflow:hidden;
 background:transparent;
 font-family:sans-serif;
 }
 
 /* CONTENEDOR */
 
-#container{
-
+#mosca{
 position:absolute;
-top:40px;
-right:60px;
-
+top:70px;
+right:80px;
+width:600px;
 opacity:0;
-
+filter:blur(20px);
 }
 
 /* TEXTO */
 
-#textBox{
-
+#texto{
+width:600px;
 text-align:right;
-
+color:#ffffff;
 font-size:44px;
 font-weight:bold;
-
-color:white;
-
-line-height:1.2;
-
 text-transform:uppercase;
-
-opacity:.5;
-
-filter: drop-shadow(6px 6px 8px rgba(0,0,0,.7));
-
+line-height:1.1;
+text-shadow:6px 6px 12px rgba(0,0,0,.8);
+opacity:0;
+filter:blur(20px);
 }
 
 /* LOGO */
 
-#logoBox{
-
+#logo{
+position:absolute;
+top:0;
+right:0;
 opacity:0;
-
+filter:blur(20px);
 display:flex;
 flex-direction:column;
 align-items:flex-end;
-
 }
 
-#logoBox img{
-
-height:90px;
-
+#logo img{
+height:120px;
 }
 
-/* TICKER REINICIADO */
+/* TICKER */
 
 #ticker{
 
-width:100px;
-height:25px;
+width:200px;
+height:35px;
 
 background:white;
 
@@ -73,13 +68,13 @@ align-items:center;
 
 }
 
-/* TEXTO */
+/* TEXTO TICKER */
 
 #ticker span{
 
 white-space:nowrap;
 
-font-size:18px;
+font-size:16px;
 font-weight:bold;
 
 color:black;
