@@ -8,6 +8,8 @@
 
 <style>
 
+/* BODY */
+
 body{
 margin:0;
 width:1920px;
@@ -17,7 +19,7 @@ background:transparent;
 font-family:sans-serif;
 }
 
-/* CONTENEDOR */
+/* CONTENEDOR MOSCA */
 
 #mosca{
 position:absolute;
@@ -53,7 +55,7 @@ filter:blur(20px);
 
 }
 
-/* LOGO */
+/* BLOQUE LOGO */
 
 #logo{
 
@@ -70,6 +72,8 @@ flex-direction:column;
 align-items:flex-end;
 
 }
+
+/* IMAGEN LOGO */
 
 #logo img{
 
@@ -100,7 +104,7 @@ padding:0 3px;
 
 }
 
-/* TEXTO TICKER */
+/* TEXTO DEL TICKER */
 
 #ticker span{
 
@@ -116,7 +120,7 @@ animation:tickerMove 8s linear infinite;
 
 }
 
-/* ANIMACION */
+/* ANIMACIÓN DEL TICKER */
 
 @keyframes tickerMove{
 
@@ -206,7 +210,7 @@ mosca.style.transition="all .8s ease";
 mosca.style.opacity=1;
 mosca.style.filter="blur(0)";
 
-/* TEXTO */
+/* TEXTO ENTRA */
 
 timers.push(setTimeout(()=>{
 
