@@ -59,9 +59,9 @@ height:90px;
 
 #ticker{
 
-width:calc(100% - 20px);
+width:calc(100% - 100px);
 
-height:26px;
+height:22px;
 
 background:white;
 
