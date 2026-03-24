@@ -1,65 +1,94 @@
-const container = document.getElementById("container");
-const textBox = document.getElementById("textBox");
-const logoBox = document.getElementById("logoBox");
-
-let repeatTimer=null;
-let running=false;
-
-function startMosca(){
-
-running=true;
-
-runBlock();
-
+body{
+margin:0;
+width:1920px;
+height:1080px;
+overflow:hidden;
+background:transparent;
+font-family:sans-serif;
 }
 
-function stopMosca(){
+/* CONTROLES DEL TICKER */
 
-running=false;
-
-clearTimeout(repeatTimer);
-
-container.style.opacity=0;
-
+:root{
+--ticker-right: 16px; /* ← movido 10px a la derecha */
+--ticker-width: 230px;
+--ticker-height: 31px;
 }
 
-function runBlock(){
+/* CONTENEDOR */
 
-if(!running) return;
+#mosca{
+position:absolute;
+top:70px;
+right:80px;
+width:600px;
+opacity:0;
+filter:blur(20px);
+}
 
-container.style.opacity=1;
+/* TEXTO */
 
-textBox.style.opacity=1;
-textBox.style.filter="blur(0px)";
+#texto{
+width:600px;
+text-align:right;
+color:#ffffff;
+font-size:36px; /* ← más pequeño */
+font-weight:bold;
+text-transform:uppercase;
+line-height:1.05; /* ← más compacto */
+text-shadow:6px 6px 12px rgba(0,0,0,.8);
+opacity:0;
+filter:blur(20px);
+}
 
-setTimeout(()=>{
+/* LOGO */
 
-textBox.style.transition="all 1s";
-textBox.style.opacity=0;
-textBox.style.filter="blur(8px)";
+#logo{
+position:absolute;
+top:0;
+right:0;
+opacity:0;
+filter:blur(20px);
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+}
 
-},15000);
+#logo img{
+height:120px;
+}
 
-setTimeout(()=>{
+/* TICKER */
 
-logoBox.style.opacity=1;
-logoBox.style.filter="blur(0px)";
+#ticker{
+width:var(--ticker-width);
+height:var(--ticker-height);
+background:white;
+margin-top:6px;
+margin-right:var(--ticker-right);
+overflow:hidden;
+display:flex;
+align-items:center;
+}
 
-},17000);
+/* TEXTO */
 
-setTimeout(()=>{
+#ticker span{
+white-space:nowrap;
+font-size:16px;
+font-weight:bold;
+color:black;
+padding-left:4px; /* ← menos espacio entre repeticiones */
+animation:tickerMove 12s linear infinite;
+}
 
-logoBox.style.transition="all 1s";
-logoBox.style.opacity=0;
-logoBox.style.filter="blur(8px)";
-logoBox.style.transform="translateX(100px)";
+/* ANIMACION */
 
-},33000);
-
-repeatTimer=setTimeout(()=>{
-
-runBlock();
-
-},240000);
-
+@keyframes tickerMove{
+0%{
+transform:translateX(120px); /* ← entra más cerca */
+}
+100%{
+transform:translateX(-100%);
+}
 }
