@@ -7,7 +7,7 @@ background:transparent;
 font-family:sans-serif;
 }
 
-/* CONTROLES DEL TICKER */
+/* CONTROLES */
 
 :root{
 --ticker-right: 16px;
@@ -89,15 +89,7 @@ margin-left:-4px;
 font-size:16px;
 font-weight:bold;
 color:black;
-}
-
-/* PUNTO PERFECTO */
-
-.dot{
-display:inline-block;
-width:32px;        /* ← clave del centrado */
-text-align:center;
-font-size:16px;
+margin-right:48px; /* ← separación consistente (≈ 6 espacios) */
 }
 
 /* LOOP */
