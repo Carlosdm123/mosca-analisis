@@ -38,40 +38,38 @@ let horaCierre = "16:00";
 let interval = null;
 
 /* ========================= */
-/*  HORA COLOMBIA CORRECTA   */
+/*   TIMESTAMP CIERRE REAL   */
 /* ========================= */
 
-function getColombiaTime(){
+function getCierreTimestamp(){
 
 const now = new Date();
 
-const colombiaStr = now.toLocaleString("en-US", {
-timeZone: "America/Bogota",
+/* hora Colombia solo para lectura */
+const colombia = new Intl.DateTimeFormat('en-US', {
+timeZone: 'America/Bogota',
+hour: '2-digit',
+minute: '2-digit',
 hour12: false
-});
+}).format(now);
 
-return new Date(colombiaStr);
+const [currentH, currentM] = colombia.split(":").map(Number);
+const [h, m] = horaCierre.split(":").map(Number);
 
+/* timestamp real */
+const nowTs = Date.now();
+
+const currentMinutes = currentH * 60 + currentM;
+const cierreMinutes = h * 60 + m;
+
+let diffMinutes = cierreMinutes - currentMinutes;
+
+/* si ya pasó → siguiente día */
+if(diffMinutes < -1){
+diffMinutes += 1440;
 }
 
-/* ========================= */
-/*   FECHA DE CIERRE         */
-/* ========================= */
-
-function getCierreDate(){
-
-const now = getColombiaTime();
-
-const [h,m] = horaCierre.split(":");
-
-const cierre = new Date(now);
-
-cierre.setHours(parseInt(h));
-cierre.setMinutes(parseInt(m));
-cierre.setSeconds(0);
-cierre.setMilliseconds(0);
-
-return cierre;
+return nowTs + (diffMinutes * 60 * 1000);
 
 }
 
@@ -99,10 +97,10 @@ return String(h).padStart(2,"0")+":"+
 
 function updateTexto(){
 
-const now = getColombiaTime();
-const cierre = getCierreDate();
+const nowTs = Date.now();
+const cierreTs = getCierreTimestamp();
 
-let diff = Math.floor((cierre - now)/1000);
+let diff = Math.floor((cierreTs - nowTs)/1000);
 
 /* ANTES */
 
@@ -146,8 +144,6 @@ function startMosca(){
 
 activo = true;
 
-/* TRANSICIONES */
-
 mosca.style.transition="all .6s ease";
 texto.style.transition="all .8s ease";
 logo.style.transition="all .8s ease";
@@ -186,7 +182,7 @@ logo.style.opacity=1;
 logo.style.filter="blur(0)";
 },21500);
 
-/* LOGO SALE (16s visible) */
+/* LOGO SALE (16s) */
 
 setTimeout(()=>{
 logo.style.opacity=0;
