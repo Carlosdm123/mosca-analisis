@@ -110,7 +110,7 @@ border-radius:50%;
 }
 
 /* ========================= */
-/* TICKER (CORRECTO)         */
+/* TICKER (SOLUCIÓN FINAL)   */
 /* ========================= */
 
 #ticker{
@@ -123,23 +123,24 @@ display:flex;
 align-items:center;
 }
 
-/* 🔥 viewport interno con padding real */
+/* viewport limpio */
 .ticker-viewport{
 width:100%;
 height:100%;
 overflow:hidden;
-padding:0 5px;
-box-sizing:border-box;
 display:flex;
 align-items:center;
 }
 
-/* track limpio */
+/* 🔥 track con buffer real */
 .ticker-track{
 display:flex;
 align-items:center;
 white-space:nowrap;
 animation:tickerLoop 12s linear infinite;
+
+padding-left:20px;
+padding-right:20px;
 }
 
 /* texto */
@@ -150,10 +151,10 @@ color:black;
 margin-right:36px;
 }
 
-/* animación */
+/* 🔥 animación compensada */
 @keyframes tickerLoop{
 0%{ transform:translateX(0); }
-100%{ transform:translateX(-50%); }
+100%{ transform:translateX(calc(-50% - 40px)); }
 }
 
 </style>
