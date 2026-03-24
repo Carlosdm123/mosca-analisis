@@ -1,0 +1,112 @@
+body{
+margin:0;
+width:1920px;
+height:1080px;
+overflow:hidden;
+background:transparent;
+font-family:sans-serif;
+}
+
+#mosca{
+position:absolute;
+top:70px;
+right:80px;
+width:600px;
+opacity:0;
+filter:blur(20px);
+}
+
+#texto{
+width:600px;
+text-align:right;
+color:#ffffff;
+font-size:36px;
+font-weight:bold;
+text-transform:uppercase;
+
+opacity:0;
+filter:blur(20px);
+
+transition:all .8s ease;
+}
+
+#logo{
+position:absolute;
+top:0;
+right:0;
+opacity:0;
+filter:blur(20px);
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+}
+
+#logo img{
+height:120px;
+}
+
+/* LOGO EE */
+
+#logoEE{
+position:absolute;
+top:0;
+right:0;
+opacity:0;
+display:flex;
+justify-content:flex-end;
+}
+
+.circle-mask{
+width:90px;
+height:90px;
+background:white;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+clip-path:circle(0% at 50% 50%);
+transition:clip-path .7s ease, background .4s ease;
+}
+
+.circle-mask img{
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:50%;
+}
+
+/* TICKER */
+
+:root{
+--ticker-width:230px;
+--ticker-height:31px;
+}
+
+#ticker{
+width:var(--ticker-width);
+height:var(--ticker-height);
+background:white;
+margin-top:6px;
+overflow:hidden;
+display:flex;
+align-items:center;
+}
+
+.ticker-track{
+display:flex;
+white-space:nowrap;
+animation:tickerLoop 12s linear infinite;
+}
+
+.text{
+font-size:16px;
+font-weight:bold;
+color:black;
+margin-right:48px;
+}
+
+@keyframes tickerLoop{
+0%{ transform:translateX(0); }
+100%{ transform:translateX(-50%); }
+}
