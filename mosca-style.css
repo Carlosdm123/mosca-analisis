@@ -84,13 +84,16 @@ border-radius:50%;
 }
 
 #ticker{
-width:var(--ticker-width);
-height:var(--ticker-height);
+width:210px;
+height:28px;
 background:white;
 margin-top:6px;
+margin-right:16px;
 overflow:hidden;
 display:flex;
 align-items:center;
+padding:0 5px; /* 🔥 ESTE ES EL BUENO */
+box-sizing:border-box;
 }
 
 .ticker-track{
