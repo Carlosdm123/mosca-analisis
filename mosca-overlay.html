@@ -72,7 +72,7 @@ transition:all .8s ease;
 }
 
 #logo img{
-height:110px; /* 🔥 ligeramente ajustado */
+height:110px;
 }
 
 /* ========================= */
@@ -110,7 +110,7 @@ border-radius:50%;
 }
 
 /* ========================= */
-/* TICKER (AJUSTADO FINO)    */
+/* TICKER (CORRECTO)         */
 /* ========================= */
 
 #ticker{
@@ -119,19 +119,30 @@ height:28px;
 background:white;
 margin-top:6px;
 margin-right:16px;
-overflow:hidden;
 display:flex;
 align-items:center;
 }
 
+/* 🔥 viewport interno con padding real */
+.ticker-viewport{
+width:100%;
+height:100%;
+overflow:hidden;
+padding:0 5px;
+box-sizing:border-box;
+display:flex;
+align-items:center;
+}
+
+/* track limpio */
 .ticker-track{
 display:flex;
 align-items:center;
 white-space:nowrap;
 animation:tickerLoop 12s linear infinite;
-margin-left:-6px;
 }
 
+/* texto */
 .text{
 font-size:14px;
 font-weight:bold;
@@ -139,6 +150,7 @@ color:black;
 margin-right:36px;
 }
 
+/* animación */
 @keyframes tickerLoop{
 0%{ transform:translateX(0); }
 100%{ transform:translateX(-50%); }
@@ -157,14 +169,15 @@ margin-right:36px;
     <div id="logo">
         <img src="assets/logo1.png">
 
-       <div id="ticker">
-    <div class="ticker-viewport">
-        <div class="ticker-track">
-            <span class="text">WWW.ELESPECTADOR.COM</span>
-            <span class="text">WWW.ELESPECTADOR.COM</span>
+        <div id="ticker">
+            <div class="ticker-viewport">
+                <div class="ticker-track">
+                    <span class="text">WWW.ELESPECTADOR.COM</span>
+                    <span class="text">WWW.ELESPECTADOR.COM</span>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
     <div id="logoEE">
         <div class="circle-mask">
