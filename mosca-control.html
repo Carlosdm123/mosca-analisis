@@ -141,7 +141,7 @@ action: toggle.checked ? "on" : "off"
 
 });
 
-/* UPDATE HORA */
+/* ENVIAR HORA */
 
 function enviarHora(){
 
@@ -160,7 +160,7 @@ status.innerText = "✔ " + hora;
 
 horaInput.addEventListener("change", enviarHora);
 
-/* 🔥 CLAVE: ENVÍO AUTOMÁTICO AL CARGAR */
+/* AUTO ENVÍO */
 
 window.addEventListener("load",()=>{
 enviarHora();
