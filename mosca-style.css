@@ -28,6 +28,9 @@ opacity:0;
 filter:blur(20px);
 
 transition:all .8s ease;
+
+/* sombra tipo broadcast para texto */
+text-shadow:0 2px 6px rgba(0,0,0,0.8);
 }
 
 #logo{
@@ -43,6 +46,9 @@ align-items:flex-end;
 
 #logo img{
 height:120px;
+
+/* sombra base para logos */
+filter: drop-shadow(0 3px 10px rgba(0,0,0,0.8));
 }
 
 /* LOGO EE */
@@ -56,15 +62,19 @@ display:flex;
 justify-content:flex-end;
 }
 
+/* 🔥 máscara negra + sombra */
 .circle-mask{
 width:90px;
 height:90px;
-background:white;
+background:black;
 border-radius:50%;
 display:flex;
 align-items:center;
 justify-content:center;
-overflow:hidden;
+
+/* IMPORTANTE para que la sombra salga */
+overflow:visible;
+
 clip-path:circle(0% at 50% 50%);
 transition:clip-path .7s ease, background .4s ease;
 }
@@ -74,6 +84,12 @@ width:100%;
 height:100%;
 object-fit:cover;
 border-radius:50%;
+
+/* 💥 sombra fuerte tipo broadcast */
+filter:
+drop-shadow(0 0 6px rgba(0,0,0,0.9))
+drop-shadow(0 0 12px rgba(0,0,0,0.6))
+drop-shadow(0 3px 10px rgba(0,0,0,0.8));
 }
 
 /* TICKER */
