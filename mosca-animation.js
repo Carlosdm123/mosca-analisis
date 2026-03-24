@@ -162,7 +162,13 @@ setTimeout(()=>{
 logoEE.style.opacity = 1;
 
 const mask = logoEE.querySelector(".circle-mask");
-mask.style.clipPath = "circle(75% at 50% 50%)";
+mask.style.clipPath = "circle(60% at 50% 50%)";
+
+/* quitar fondo blanco después de abrir */
+
+setTimeout(()=>{
+mask.style.background = "transparent";
+},400);
 
 },39000);
 
@@ -184,6 +190,9 @@ logoEE.style.opacity = 0;
 setTimeout(()=>{
 if(activo) startMosca();
 },65000);
+
+       mask.style.background = "white";
+mask.style.clipPath = "circle(0% at 50% 50%)";
 
 /* CONTADOR */
 
