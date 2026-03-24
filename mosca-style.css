@@ -44,6 +44,39 @@ align-items:flex-end;
 height:120px;
 }
 
+/* LOGO EE */
+
+#logoEE{
+position:absolute;
+top:0;
+right:0;
+opacity:0;
+display:flex;
+justify-content:flex-end;
+}
+
+.circle-mask{
+width:120px;
+height:120px;
+background:white;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+clip-path:circle(0% at 50% 50%);
+transition:clip-path .8s ease;
+}
+
+.circle-mask img{
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:50%;
+}
+
+/* TICKER */
+
 :root{
 --ticker-right:16px;
 --ticker-width:230px;
