@@ -1,26 +1,22 @@
 let timeouts = [];
+let interval = null;
 let minutosLoop = 0;
 
 /* ========================= */
-/* LIMPIAR TIMERS            */
+/* LIMPIEZA TOTAL            */
 /* ========================= */
 
-function clearAllTimers(){
+function resetMosca(){
+
 timeouts.forEach(t=>clearTimeout(t));
 timeouts = [];
+
+if(interval){
+clearInterval(interval);
+interval = null;
 }
 
-/* ========================= */
-/* ANIMACIÓN                 */
-/* ========================= */
-
-function startMosca(){
-
-clearAllTimers();
-activo = true;
-calcularCierre();
-
-/* RESET */
+/* reset visual TOTAL */
 
 texto.style.opacity = 0;
 texto.style.filter = "blur(20px)";
@@ -34,18 +30,30 @@ const mask = logoEE.querySelector(".circle-mask");
 mask.style.clipPath = "circle(0% at 50% 50%)";
 mask.style.background = "white";
 
-/* CONTENEDOR */
+mosca.style.opacity = 0;
+mosca.style.filter = "blur(20px)";
+
+}
+
+/* ========================= */
+/* START LIMPIO              */
+/* ========================= */
+
+function startMosca(){
+
+resetMosca(); // 🔥 CRÍTICO
+
+activo = true;
+calcularCierre();
 
 mosca.style.opacity = 1;
 mosca.style.filter = "blur(0)";
 
-/* ========================= */
-/* SECUENCIA ORDENADA        */
-/* ========================= */
-
 let t = 0;
 
-/* TEXTO */
+/* ========================= */
+/* TEXTO                     */
+/* ========================= */
 
 timeouts.push(setTimeout(()=>{
 texto.style.opacity = 1;
@@ -59,7 +67,9 @@ texto.style.filter = "blur(20px)";
 
 t += 20000;
 
-/* LOGO + TICKER */
+/* ========================= */
+/* LOGO + TICKER             */
+/* ========================= */
 
 timeouts.push(setTimeout(()=>{
 logo.style.opacity = 1;
@@ -73,10 +83,14 @@ logo.style.filter = "blur(20px)";
 
 t += 20000;
 
-/* LOGO EE */
+/* ========================= */
+/* LOGO EE                   */
+/* ========================= */
 
 timeouts.push(setTimeout(()=>{
 logoEE.style.opacity = 1;
+
+const mask = logoEE.querySelector(".circle-mask");
 mask.style.clipPath = "circle(60% at 50% 50%)";
 
 setTimeout(()=>{
@@ -86,6 +100,7 @@ mask.style.background = "transparent";
 }, t+200));
 
 timeouts.push(setTimeout(()=>{
+const mask = logoEE.querySelector(".circle-mask");
 mask.style.background = "white";
 mask.style.clipPath = "circle(0% at 50% 50%)";
 }, t+10000));
@@ -97,62 +112,39 @@ logoEE.style.opacity = 0;
 t += 10000;
 
 /* ========================= */
-/* LOOP CON PAUSA            */
+/* REINICIO CONTROLADO       */
 /* ========================= */
 
 timeouts.push(setTimeout(()=>{
-if(activo){
 
+if(!activo) return;
+
+/* pausa en negro */
 let delay = minutosLoop * 60 * 1000;
 
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 if(activo) startMosca();
-}, delay);
+}, delay));
 
-}
 }, t));
 
-/* CONTADOR */
+/* ========================= */
+/* CONTADOR                  */
+/* ========================= */
 
-if(interval) clearInterval(interval);
 interval = setInterval(updateTexto,1000);
 updateTexto();
 
 }
 
 /* ========================= */
-/* WEBSOCKET EXTRA           */
+/* STOP LIMPIO               */
 /* ========================= */
 
-channel.subscribe("control",(msg)=>{
+function stopMosca(){
 
-const d = msg.data;
+activo = false;
 
-if(d.action==="on") startMosca();
-if(d.action==="off") stopMosca();
+resetMosca(); // 🔥 CRÍTICO
 
-if(d.action==="updateHora"){
-horaCierre = d.hora;
-calcularCierre();
-updateTexto();
 }
-
-/* 🔥 NUEVO */
-if(d.action==="updateLoop"){
-minutosLoop = parseInt(d.minutos || 0);
-}
-
-  const loopMin = document.getElementById("loopMin");
-
-function enviarLoop(){
-channel.publish("control",{
-action:"updateLoop",
-minutos: loopMin.value
-});
-}
-
-loopMin.addEventListener("change", enviarLoop);
-
-window.addEventListener("load", enviarLoop);
-
-});
