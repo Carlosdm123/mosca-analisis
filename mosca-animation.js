@@ -4,10 +4,10 @@ const logo = document.getElementById("logo");
 const logoEE = document.getElementById("logoEE");
 
 let activo = false;
-let running = false; // 🔥 LOCK
+let running = false;
+
 let horaCierre = "16:00";
 let interval = null;
-let cierreTsGlobal = null;
 
 let timeouts = [];
 let minutosLoop = 0;
@@ -41,46 +41,12 @@ mask.style.clipPath = "circle(0% at 50% 50%)";
 mask.style.background = "white";
 
 mosca.style.opacity = 0;
-mosca.style.filter = "blur(20px);
-
+mosca.style.filter = "blur(20px)";
 }
 
 /* ========================= */
-/* CIERRE (FIX TOTAL)        */
+/* FORMATO TIEMPO            */
 /* ========================= */
-
-function calcularCierre(){
-
-const now = new Date();
-
-/* 🔥 obtener hora real de Colombia como fecha */
-const colombiaNow = new Date(
-now.toLocaleString("en-US", { timeZone: "America/Bogota" })
-);
-
-/* construir fecha de cierre HOY en Colombia */
-const cierre = new Date(colombiaNow);
-
-const [h, m] = horaCierre.split(":").map(Number);
-
-cierre.setHours(h);
-cierre.setMinutes(m);
-cierre.setSeconds(0);
-cierre.setMilliseconds(0);
-
-/* diferencia real */
-let diffMs = cierre - colombiaNow;
-
-/* 🔥 SI YA PASÓ → NO MANDAR A MAÑANA */
-if(diffMs <= 0){
-cierreTsGlobal = Date.now() - 1000;
-return;
-}
-
-/* convertir a timestamp real */
-cierreTsGlobal = Date.now() + diffMs;
-
-}
 
 function formatTime(sec){
 
@@ -97,42 +63,62 @@ return String(h).padStart(2,"0")+":"+
 }
 
 /* ========================= */
-/* TEXTO DINÁMICO            */
+/* TEXTO DINÁMICO (FIX REAL) */
 /* ========================= */
 
 function updateTexto(){
 
-if(!cierreTsGlobal) return;
+const now = new Date();
 
-const nowTs = Date.now();
-let diff = Math.floor((cierreTsGlobal - nowTs)/1000);
+/* hora real en Colombia */
+const colombiaNow = new Date(
+now.toLocaleString("en-US", { timeZone: "America/Bogota" })
+);
 
+/* tiempo actual en segundos */
+const nowSec =
+colombiaNow.getHours() * 3600 +
+colombiaNow.getMinutes() * 60 +
+colombiaNow.getSeconds();
+
+/* hora cierre */
+const [h, m] = horaCierre.split(":").map(Number);
+const cierreSec = (h * 3600) + (m * 60);
+
+/* diferencia */
+let diff = cierreSec - nowSec;
+
+/* lógica */
 if(diff > 0){
+
 texto.innerHTML = `CIERRE DE VOTACIONES EN:<br>${formatTime(diff)}`;
+
 }
 else if(diff <= 0 && diff > -60){
+
 texto.innerHTML = `VOTACIONES CERRADAS`;
+
 }
 else{
+
 texto.innerHTML = `ANÁLISIS DE RESULTADOS<br>ELECTORALES 2026`;
+
 }
 
 }
 
 /* ========================= */
-/* ANIMACIÓN ÚNICA           */
+/* ANIMACIÓN                 */
 /* ========================= */
 
 function startMosca(){
 
-if(running) return; // 🔥 evita duplicados
+if(running) return;
 
 resetMosca();
 
 activo = true;
 running = true;
-
-calcularCierre();
 
 mosca.style.opacity = 1;
 mosca.style.filter = "blur(0)";
@@ -193,7 +179,7 @@ logoEE.style.opacity = 0;
 
 t += 10000;
 
-/* FIN CICLO */
+/* LOOP */
 
 timeouts.push(setTimeout(()=>{
 
@@ -209,12 +195,16 @@ if(activo) startMosca();
 
 }, t));
 
-/* CONTADOR */
+/* CONTADOR EN TIEMPO REAL */
 
 interval = setInterval(updateTexto,1000);
 updateTexto();
 
 }
+
+/* ========================= */
+/* STOP                      */
+/* ========================= */
 
 function stopMosca(){
 activo = false;
@@ -235,21 +225,24 @@ channel.subscribe("control",(msg)=>{
 
 const d = msg.data;
 
+/* ON */
 if(d.action==="on"){
 stopMosca();
 setTimeout(()=>startMosca(),80);
 }
 
+/* OFF */
 if(d.action==="off"){
 stopMosca();
 }
 
+/* CAMBIO HORA */
 if(d.action==="updateHora"){
 horaCierre = d.hora;
-calcularCierre();
-updateTexto();
+updateTexto(); // 🔥 recalcula inmediato
 }
 
+/* LOOP */
 if(d.action==="updateLoop"){
 minutosLoop = parseInt(d.minutos || 0);
 }
