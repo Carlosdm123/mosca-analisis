@@ -8,7 +8,9 @@
 
 <style>
 
-/* BASE */
+/* ========================= */
+/* BASE                      */
+/* ========================= */
 
 body{
 margin:0;
@@ -19,7 +21,9 @@ background:transparent;
 font-family:sans-serif;
 }
 
-/* CONTENEDOR */
+/* ========================= */
+/* CONTENEDOR               */
+/* ========================= */
 
 #mosca{
 position:absolute;
@@ -31,7 +35,9 @@ filter:blur(20px);
 transition:all .6s ease;
 }
 
-/* TEXTO */
+/* ========================= */
+/* TEXTO                     */
+/* ========================= */
 
 #texto{
 width:600px;
@@ -45,10 +51,13 @@ opacity:0;
 filter:blur(20px);
 transition:all .8s ease;
 
+line-height:1.05;
 text-shadow:6px 6px 12px rgba(0,0,0,.8);
 }
 
-/* LOGO PRINCIPAL */
+/* ========================= */
+/* LOGO PRINCIPAL            */
+/* ========================= */
 
 #logo{
 position:absolute;
@@ -63,10 +72,12 @@ transition:all .8s ease;
 }
 
 #logo img{
-height:120px;
+height:110px; /* 🔥 ligeramente ajustado */
 }
 
-/* LOGO EE (AJUSTADO) */
+/* ========================= */
+/* LOGO EE                   */
+/* ========================= */
 
 #logoEE{
 position:absolute;
@@ -78,7 +89,7 @@ justify-content:flex-end;
 }
 
 .circle-mask{
-width:105px;  /* 🔥 MÁS GRANDE */
+width:105px;
 height:105px;
 background:white;
 border-radius:50%;
@@ -98,14 +109,16 @@ object-fit:cover;
 border-radius:50%;
 }
 
-/* TICKER (AJUSTADO) */
+/* ========================= */
+/* TICKER (AJUSTADO FINO)    */
+/* ========================= */
 
 #ticker{
-width:230px;
-height:31px;
+width:210px;
+height:28px;
 background:white;
 margin-top:6px;
-margin-right:12px; /* 🔥 MOVIDO A LA IZQUIERDA */
+margin-right:16px;
 overflow:hidden;
 display:flex;
 align-items:center;
@@ -113,15 +126,17 @@ align-items:center;
 
 .ticker-track{
 display:flex;
+align-items:center;
 white-space:nowrap;
 animation:tickerLoop 12s linear infinite;
+margin-left:-6px;
 }
 
 .text{
-font-size:16px;
+font-size:14px;
 font-weight:bold;
 color:black;
-margin-right:48px;
+margin-right:36px;
 }
 
 @keyframes tickerLoop{
@@ -173,7 +188,9 @@ let horaCierre = "16:00";
 let interval = null;
 let cierreTsGlobal = null;
 
-/* CALCULAR CIERRE */
+/* ========================= */
+/* CALCULAR CIERRE           */
+/* ========================= */
 
 function calcularCierre(){
 
@@ -204,7 +221,9 @@ cierreTsGlobal = nowTs + (diffMinutes * 60 * 1000);
 
 }
 
-/* FORMATO TIEMPO */
+/* ========================= */
+/* FORMATO TIEMPO            */
+/* ========================= */
 
 function formatTime(sec){
 
@@ -220,7 +239,9 @@ return String(h).padStart(2,"0")+":"+
 
 }
 
-/* TEXTO DINÁMICO */
+/* ========================= */
+/* TEXTO DINÁMICO            */
+/* ========================= */
 
 function updateTexto(){
 
@@ -253,7 +274,9 @@ ELECTORALES 2026
 
 }
 
-/* ANIMACIÓN */
+/* ========================= */
+/* ANIMACIÓN                 */
+/* ========================= */
 
 function startMosca(){
 
@@ -349,7 +372,9 @@ mosca.style.filter = "blur(15px)";
 
 }
 
-/* ABLY */
+/* ========================= */
+/* ABLY                      */
+/* ========================= */
 
 const ably = new Ably.Realtime({
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4"
