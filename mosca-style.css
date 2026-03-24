@@ -10,7 +10,7 @@ font-family:sans-serif;
 /* CONTROLES DEL TICKER */
 
 :root{
---ticker-right: 16px; /* ← movido 10px a la derecha */
+--ticker-right: 16px; /* movido 10px a la derecha */
 --ticker-width: 230px;
 --ticker-height: 31px;
 }
@@ -32,7 +32,7 @@ filter:blur(20px);
 width:600px;
 text-align:right;
 color:#ffffff;
-font-size:36px; /* ← más pequeño */
+font-size:36px;
 font-weight:bold;
 text-transform:uppercase;
 line-height:1.05;
@@ -79,6 +79,7 @@ align-items:center;
 display:flex;
 white-space:nowrap;
 animation:tickerLoop 12s linear infinite;
+margin-left:-4px; /* ← ajuste fino a la izquierda */
 }
 
 /* TEXTO DEL TICKER */
@@ -87,7 +88,7 @@ animation:tickerLoop 12s linear infinite;
 font-size:16px;
 font-weight:bold;
 color:black;
-padding-right:40px; /* espacio entre bloques */
+padding-right:40px;
 }
 
 /* ANIMACIÓN CONTINUA REAL */
