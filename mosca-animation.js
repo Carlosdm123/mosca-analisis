@@ -41,12 +41,12 @@ mask.style.clipPath = "circle(0% at 50% 50%)";
 mask.style.background = "white";
 
 mosca.style.opacity = 0;
-mosca.style.filter = "blur(20px)";
+mosca.style.filter = "blur(20px);
 
 }
 
 /* ========================= */
-/* CIERRE                    */
+/* CIERRE (FIX TOTAL)        */
 /* ========================= */
 
 function calcularCierre(){
@@ -71,9 +71,9 @@ const cierreMinutes = h * 60 + m;
 
 let diffMinutes = cierreMinutes - currentMinutes;
 
-/* 🔥 CLAVE: SI YA PASÓ, NO LO MANDES A MAÑANA */
+/* 🔥 CLAVE: NO REBOTAR A MAÑANA */
 if(diffMinutes < 0){
-cierreTsGlobal = nowTs - 1000; // fuerza estado "cerrado"
+cierreTsGlobal = nowTs - 1000; // fuerza estado cerrado
 return;
 }
 
@@ -81,6 +81,10 @@ return;
 cierreTsGlobal = nowTs + (diffMinutes * 60 * 1000);
 
 }
+
+/* ========================= */
+/* FORMATO TIEMPO            */
+/* ========================= */
 
 function formatTime(sec){
 
@@ -95,6 +99,10 @@ return String(h).padStart(2,"0")+":"+
        String(s).padStart(2,"0");
 
 }
+
+/* ========================= */
+/* TEXTO DINÁMICO            */
+/* ========================= */
 
 function updateTexto(){
 
