@@ -33,12 +33,8 @@ const mosca = document.getElementById("mosca");
 const texto = document.getElementById("texto");
 const logo = document.getElementById("logo");
 
-/* ========================= */
-/*        ESTADO GLOBAL      */
-/* ========================= */
-
 let activo = false;
-let horaCierre = "16:00"; // default
+let horaCierre = "16:00";
 let interval = null;
 
 /* ========================= */
@@ -48,23 +44,18 @@ let interval = null;
 function getColombiaTime(){
 
 const now = new Date();
-
-const colombia = new Date(
-now.toLocaleString("en-US", { timeZone: "America/Bogota" })
-);
-
-return colombia;
+const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+return new Date(utc - (5 * 60 * 60 * 1000));
 
 }
 
 /* ========================= */
-/*   PARSE HORA CIERRE       */
+/*   FECHA DE CIERRE         */
 /* ========================= */
 
 function getCierreDate(){
 
 const now = getColombiaTime();
-
 const [h,m] = horaCierre.split(":");
 
 const cierre = new Date(now);
@@ -72,16 +63,19 @@ const cierre = new Date(now);
 cierre.setHours(parseInt(h));
 cierre.setMinutes(parseInt(m));
 cierre.setSeconds(0);
+cierre.setMilliseconds(0);
 
 return cierre;
 
 }
 
 /* ========================= */
-/*    FORMATO TIEMPO         */
+/*   FORMATO TIEMPO          */
 /* ========================= */
 
 function formatTime(sec){
+
+sec = Math.max(0, sec);
 
 let h = Math.floor(sec/3600);
 let m = Math.floor((sec%3600)/60);
@@ -94,7 +88,7 @@ return String(h).padStart(2,"0")+":"+
 }
 
 /* ========================= */
-/*     ACTUALIZAR TEXTO      */
+/*     UPDATE TEXTO          */
 /* ========================= */
 
 function updateTexto(){
@@ -104,7 +98,7 @@ const cierre = getCierreDate();
 
 let diff = Math.floor((cierre - now)/1000);
 
-/* BEFORE */
+/* ANTES */
 
 if(diff > 0){
 
@@ -115,7 +109,7 @@ ${formatTime(diff)}
 
 }
 
-/* JUST CLOSED (1 min) */
+/* 1 MIN DESPUÉS */
 
 else if(diff <= 0 && diff > -60){
 
@@ -125,7 +119,7 @@ VOTACIONES CERRADAS
 
 }
 
-/* AFTER */
+/* DESPUÉS */
 
 else{
 
@@ -161,14 +155,9 @@ logo.style.opacity=1;
 logo.style.filter="blur(0)";
 },500);
 
-/* LOOP TEXTO */
-
 if(interval) clearInterval(interval);
 
-interval = setInterval(()=>{
-updateTexto();
-},1000);
-
+interval = setInterval(updateTexto, 1000);
 updateTexto();
 
 }
@@ -199,12 +188,8 @@ channel.subscribe("control",(msg)=>{
 
 const d = msg.data;
 
-/* ON OFF */
-
 if(d.action==="on") startMosca();
 if(d.action==="off") stopMosca();
-
-/* UPDATE HORA */
 
 if(d.action==="updateHora"){
 horaCierre = d.hora;
