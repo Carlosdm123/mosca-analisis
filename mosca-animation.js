@@ -1,94 +1,234 @@
-body{
-margin:0;
-width:1920px;
-height:1080px;
-overflow:hidden;
-background:transparent;
-font-family:sans-serif;
+const mosca = document.getElementById("mosca");
+const texto = document.getElementById("texto");
+const logo = document.getElementById("logo");
+const logoEE = document.getElementById("logoEE");
+
+let activo = false;
+let horaCierre = "16:00";
+let interval = null;
+
+/* ========================= */
+/*   TIMESTAMP CIERRE REAL   */
+/* ========================= */
+
+function getCierreTimestamp(){
+
+const now = new Date();
+
+const colombia = new Intl.DateTimeFormat('en-US', {
+timeZone: 'America/Bogota',
+hour: '2-digit',
+minute: '2-digit',
+hour12: false
+}).format(now);
+
+const [currentH, currentM] = colombia.split(":").map(Number);
+const [h, m] = horaCierre.split(":").map(Number);
+
+const nowTs = Date.now();
+
+const currentMinutes = currentH * 60 + currentM;
+const cierreMinutes = h * 60 + m;
+
+let diffMinutes = cierreMinutes - currentMinutes;
+
+if(diffMinutes < -1){
+diffMinutes += 1440;
 }
 
-/* CONTROLES DEL TICKER */
+return nowTs + (diffMinutes * 60 * 1000);
 
-:root{
---ticker-right: 16px; /* ← movido 10px a la derecha */
---ticker-width: 230px;
---ticker-height: 31px;
 }
 
-/* CONTENEDOR */
+/* ========================= */
+/*   FORMATO TIEMPO          */
+/* ========================= */
 
-#mosca{
-position:absolute;
-top:70px;
-right:80px;
-width:600px;
-opacity:0;
-filter:blur(20px);
+function formatTime(sec){
+
+sec = Math.max(0, sec);
+
+let h = Math.floor(sec/3600);
+let m = Math.floor((sec%3600)/60);
+let s = sec%60;
+
+return String(h).padStart(2,"0")+":"+
+       String(m).padStart(2,"0")+":"+
+       String(s).padStart(2,"0");
+
 }
 
-/* TEXTO */
+/* ========================= */
+/*     UPDATE TEXTO          */
+/* ========================= */
 
-#texto{
-width:600px;
-text-align:right;
-color:#ffffff;
-font-size:36px; /* ← más pequeño */
-font-weight:bold;
-text-transform:uppercase;
-line-height:1.05; /* ← más compacto */
-text-shadow:6px 6px 12px rgba(0,0,0,.8);
-opacity:0;
-filter:blur(20px);
+function updateTexto(){
+
+const nowTs = Date.now();
+const cierreTs = getCierreTimestamp();
+
+let diff = Math.floor((cierreTs - nowTs)/1000);
+
+if(diff > 0){
+
+texto.innerHTML = `
+CIERRE DE VOTACIONES EN:<br>
+${formatTime(diff)}
+`;
+
 }
 
-/* LOGO */
+else if(diff <= 0 && diff > -60){
 
-#logo{
-position:absolute;
-top:0;
-right:0;
-opacity:0;
-filter:blur(20px);
-display:flex;
-flex-direction:column;
-align-items:flex-end;
+texto.innerHTML = `
+VOTACIONES CERRADAS
+`;
+
 }
 
-#logo img{
-height:120px;
+else{
+
+texto.innerHTML = `
+ANÁLISIS DE RESULTADOS<br>
+ELECTORALES 2026
+`;
+
 }
 
-/* TICKER */
-
-#ticker{
-width:var(--ticker-width);
-height:var(--ticker-height);
-background:white;
-margin-top:6px;
-margin-right:var(--ticker-right);
-overflow:hidden;
-display:flex;
-align-items:center;
 }
 
-/* TEXTO */
+/* ========================= */
+/*        ANIMACIÓN          */
+/* ========================= */
 
-#ticker span{
-white-space:nowrap;
-font-size:16px;
-font-weight:bold;
-color:black;
-padding-left:4px; /* ← menos espacio entre repeticiones */
-animation:tickerMove 12s linear infinite;
+function startMosca(){
+
+activo = true;
+
+/* TRANSICIONES */
+
+mosca.style.transition="all .6s ease";
+texto.style.transition="all .8s ease";
+logo.style.transition="all .8s ease";
+
+/* RESET */
+
+texto.style.opacity=0;
+texto.style.filter="blur(20px)";
+
+logo.style.opacity=0;
+logo.style.filter="blur(20px)";
+
+logoEE.style.opacity=0;
+logoEE.querySelector(".circle-mask").style.clipPath="circle(0% at 50% 50%)";
+
+/* ENTRA CONTENEDOR */
+
+mosca.style.opacity=1;
+mosca.style.filter="blur(0)";
+
+/* TEXTO ENTRA */
+
+setTimeout(()=>{
+texto.style.opacity=1;
+texto.style.filter="blur(0)";
+},200);
+
+/* TEXTO SALE (20s) */
+
+setTimeout(()=>{
+texto.style.opacity=0;
+texto.style.filter="blur(20px)";
+},20000);
+
+/* LOGO ENTRA */
+
+setTimeout(()=>{
+logo.style.opacity=1;
+logo.style.filter="blur(0)";
+},21500);
+
+/* LOGO SALE (16s) */
+
+setTimeout(()=>{
+logo.style.opacity=0;
+logo.style.filter="blur(20px)";
+},37500);
+
+/* LOGO EE ENTRA */
+
+setTimeout(()=>{
+
+logoEE.style.opacity = 1;
+
+const mask = logoEE.querySelector(".circle-mask");
+mask.style.clipPath = "circle(75% at 50% 50%)";
+
+},39000);
+
+/* LOGO EE SALE */
+
+setTimeout(()=>{
+
+const mask = logoEE.querySelector(".circle-mask");
+mask.style.clipPath = "circle(0% at 50% 50%)";
+
+},55000);
+
+setTimeout(()=>{
+logoEE.style.opacity = 0;
+},56000);
+
+/* LOOP */
+
+setTimeout(()=>{
+if(activo) startMosca();
+},65000);
+
+/* CONTADOR */
+
+if(interval) clearInterval(interval);
+interval = setInterval(updateTexto,1000);
+updateTexto();
+
 }
 
-/* ANIMACION */
+/* ========================= */
+/*        STOP               */
+/* ========================= */
 
-@keyframes tickerMove{
-0%{
-transform:translateX(120px); /* ← entra más cerca */
+function stopMosca(){
+
+activo = false;
+
+if(interval) clearInterval(interval);
+
+mosca.style.opacity=0;
+mosca.style.filter="blur(15px)";
+
 }
-100%{
-transform:translateX(-100%);
+
+/* ========================= */
+/*         ABLY              */
+/* ========================= */
+
+const ably = new Ably.Realtime({
+key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
+recover:true
+});
+
+const channel = ably.channels.get("vmix-mosca");
+
+channel.subscribe("control",(msg)=>{
+
+const d = msg.data;
+
+if(d.action==="on") startMosca();
+if(d.action==="off") stopMosca();
+
+if(d.action==="updateHora"){
+horaCierre = d.hora;
+updateTexto();
 }
-}
+
+});
