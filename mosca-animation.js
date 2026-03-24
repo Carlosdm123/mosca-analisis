@@ -1,101 +1,13 @@
-const mosca = document.getElementById("mosca");
-const texto = document.getElementById("texto");
-const logo = document.getElementById("logo");
-const logoEE = document.getElementById("logoEE");
-
-let activo = false;
-let horaCierre = "16:00";
-let interval = null;
-let cierreTsGlobal = null;
+let timeouts = [];
+let minutosLoop = 0;
 
 /* ========================= */
-/* CALCULAR CIERRE           */
+/* LIMPIAR TIMERS            */
 /* ========================= */
 
-function calcularCierre(){
-
-const now = new Date();
-
-const colombia = new Intl.DateTimeFormat('en-US', {
-timeZone: 'America/Bogota',
-hour: '2-digit',
-minute: '2-digit',
-hour12: false
-}).format(now);
-
-const [currentH, currentM] = colombia.split(":").map(Number);
-const [h, m] = horaCierre.split(":").map(Number);
-
-const nowTs = Date.now();
-
-const currentMinutes = currentH * 60 + currentM;
-const cierreMinutes = h * 60 + m;
-
-let diffMinutes = cierreMinutes - currentMinutes;
-
-if(diffMinutes < -1){
-diffMinutes += 1440;
-}
-
-cierreTsGlobal = nowTs + (diffMinutes * 60 * 1000);
-
-}
-
-/* ========================= */
-/* FORMATO TIEMPO            */
-/* ========================= */
-
-function formatTime(sec){
-
-sec = Math.max(0, sec);
-
-let h = Math.floor(sec/3600);
-let m = Math.floor((sec%3600)/60);
-let s = sec%60;
-
-return String(h).padStart(2,"0")+":"+
-       String(m).padStart(2,"0")+":"+
-       String(s).padStart(2,"0");
-
-}
-
-/* ========================= */
-/* UPDATE TEXTO              */
-/* ========================= */
-
-function updateTexto(){
-
-if(!cierreTsGlobal) return;
-
-const nowTs = Date.now();
-let diff = Math.floor((cierreTsGlobal - nowTs)/1000);
-
-if(diff > 0){
-
-texto.innerHTML = `
-CIERRE DE VOTACIONES EN:<br>
-${formatTime(diff)}
-`;
-
-}
-
-else if(diff <= 0 && diff > -60){
-
-texto.innerHTML = `
-VOTACIONES CERRADAS
-`;
-
-}
-
-else{
-
-texto.innerHTML = `
-ANÁLISIS DE RESULTADOS<br>
-ELECTORALES 2026
-`;
-
-}
-
+function clearAllTimers(){
+timeouts.forEach(t=>clearTimeout(t));
+timeouts = [];
 }
 
 /* ========================= */
@@ -104,10 +16,11 @@ ELECTORALES 2026
 
 function startMosca(){
 
+clearAllTimers();
 activo = true;
 calcularCierre();
 
-/* RESET LIMPIO */
+/* RESET */
 
 texto.style.opacity = 0;
 texto.style.filter = "blur(20px)";
@@ -126,63 +39,78 @@ mask.style.background = "white";
 mosca.style.opacity = 1;
 mosca.style.filter = "blur(0)";
 
-/* TEXTO ENTRA */
+/* ========================= */
+/* SECUENCIA ORDENADA        */
+/* ========================= */
 
-setTimeout(()=>{
+let t = 0;
+
+/* TEXTO */
+
+timeouts.push(setTimeout(()=>{
 texto.style.opacity = 1;
 texto.style.filter = "blur(0)";
-},200);
+}, t+200));
 
-/* TEXTO SALE */
-
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 texto.style.opacity = 0;
 texto.style.filter = "blur(20px)";
-},20000);
+}, t+20000));
 
-/* LOGO ENTRA */
+t += 20000;
 
-setTimeout(()=>{
+/* LOGO + TICKER */
+
+timeouts.push(setTimeout(()=>{
 logo.style.opacity = 1;
 logo.style.filter = "blur(0)";
-},21500);
+}, t+200));
 
-/* LOGO SALE */
-
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 logo.style.opacity = 0;
 logo.style.filter = "blur(20px)";
-},37500);
+}, t+20000));
 
-/* LOGO EE ENTRA */
+t += 20000;
 
-setTimeout(()=>{
+/* LOGO EE */
+
+timeouts.push(setTimeout(()=>{
 logoEE.style.opacity = 1;
-
 mask.style.clipPath = "circle(60% at 50% 50%)";
 
 setTimeout(()=>{
 mask.style.background = "transparent";
 },400);
 
-},39000);
+}, t+200));
 
-/* LOGO EE SALE */
-
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 mask.style.background = "white";
 mask.style.clipPath = "circle(0% at 50% 50%)";
-},55000);
+}, t+10000));
 
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 logoEE.style.opacity = 0;
-},56000);
+}, t+10500));
 
-/* LOOP */
+t += 10000;
+
+/* ========================= */
+/* LOOP CON PAUSA            */
+/* ========================= */
+
+timeouts.push(setTimeout(()=>{
+if(activo){
+
+let delay = minutosLoop * 60 * 1000;
 
 setTimeout(()=>{
 if(activo) startMosca();
-},65000);
+}, delay);
+
+}
+}, t));
 
 /* CONTADOR */
 
@@ -192,28 +120,9 @@ updateTexto();
 
 }
 
-/* STOP */
-
-function stopMosca(){
-
-activo = false;
-
-if(interval) clearInterval(interval);
-
-mosca.style.opacity = 0;
-mosca.style.filter = "blur(15px)";
-
-}
-
 /* ========================= */
-/* ABLY                      */
+/* WEBSOCKET EXTRA           */
 /* ========================= */
-
-const ably = new Ably.Realtime({
-key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4"
-});
-
-const channel = ably.channels.get("vmix-mosca");
 
 channel.subscribe("control",(msg)=>{
 
@@ -226,6 +135,11 @@ if(d.action==="updateHora"){
 horaCierre = d.hora;
 calcularCierre();
 updateTexto();
+}
+
+/* 🔥 NUEVO */
+if(d.action==="updateLoop"){
+minutosLoop = parseInt(d.minutos || 0);
 }
 
 });
