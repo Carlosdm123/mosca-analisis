@@ -2,32 +2,24 @@
 <html>
 
 <head>
-
 <meta charset="UTF-8">
 <link rel="stylesheet" href="mosca-style.css">
 <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
-
 </head>
 
 <body>
 
 <div id="mosca">
 
-<div id="texto">
-ANÁLISIS DE RESULTADOS<br>
-ELECTORALES 2026
-</div>
+<div id="texto"></div>
 
 <div id="logo">
-
 <img src="assets/logo1.png">
 
 <div id="ticker">
   <div class="ticker-track">
-
     <span class="text">WWW.ELESPECTADOR.COM</span>
     <span class="text">WWW.ELESPECTADOR.COM</span>
-
   </div>
 </div>
 
@@ -41,109 +33,160 @@ const mosca = document.getElementById("mosca");
 const texto = document.getElementById("texto");
 const logo = document.getElementById("logo");
 
-let activo=false;
-let timers=[];
+/* ========================= */
+/*        ESTADO GLOBAL      */
+/* ========================= */
 
-function clearTimers(){
-timers.forEach(t=>clearTimeout(t));
-timers=[];
-}
+let activo = false;
+let horaCierre = "16:00"; // default
+let interval = null;
 
-function resetVisual(){
+/* ========================= */
+/*     HORA COLOMBIA         */
+/* ========================= */
 
-mosca.style.transition="none";
-texto.style.transition="none";
-logo.style.transition="none";
+function getColombiaTime(){
 
-mosca.style.opacity=0;
-mosca.style.filter="blur(20px)";
+const now = new Date();
 
-texto.style.opacity=0;
-texto.style.filter="blur(20px)";
+const colombia = new Date(
+now.toLocaleString("en-US", { timeZone: "America/Bogota" })
+);
 
-logo.style.opacity=0;
-logo.style.filter="blur(20px)";
-logo.style.transform="translateX(0)";
+return colombia;
 
 }
 
-function runAnim(){
+/* ========================= */
+/*   PARSE HORA CIERRE       */
+/* ========================= */
 
-if(!activo) return;
+function getCierreDate(){
+
+const now = getColombiaTime();
+
+const [h,m] = horaCierre.split(":");
+
+const cierre = new Date(now);
+
+cierre.setHours(parseInt(h));
+cierre.setMinutes(parseInt(m));
+cierre.setSeconds(0);
+
+return cierre;
+
+}
+
+/* ========================= */
+/*    FORMATO TIEMPO         */
+/* ========================= */
+
+function formatTime(sec){
+
+let h = Math.floor(sec/3600);
+let m = Math.floor((sec%3600)/60);
+let s = sec%60;
+
+return String(h).padStart(2,"0")+":"+
+       String(m).padStart(2,"0")+":"+
+       String(s).padStart(2,"0");
+
+}
+
+/* ========================= */
+/*     ACTUALIZAR TEXTO      */
+/* ========================= */
+
+function updateTexto(){
+
+const now = getColombiaTime();
+const cierre = getCierreDate();
+
+let diff = Math.floor((cierre - now)/1000);
+
+/* BEFORE */
+
+if(diff > 0){
+
+texto.innerHTML = `
+CIERRE DE VOTACIONES EN:<br>
+${formatTime(diff)}
+`;
+
+}
+
+/* JUST CLOSED (1 min) */
+
+else if(diff <= 0 && diff > -60){
+
+texto.innerHTML = `
+VOTACIONES CERRADAS
+`;
+
+}
+
+/* AFTER */
+
+else{
+
+texto.innerHTML = `
+ANÁLISIS DE RESULTADOS<br>
+ELECTORALES 2026
+`;
+
+}
+
+}
+
+/* ========================= */
+/*        ANIMACIÓN          */
+/* ========================= */
+
+function startMosca(){
+
+activo = true;
 
 mosca.style.transition="all .8s ease";
+texto.style.transition="all .8s ease";
+logo.style.transition="all 1s ease";
 
 mosca.style.opacity=1;
 mosca.style.filter="blur(0)";
 
-timers.push(setTimeout(()=>{
-
-texto.style.transition="all 1s ease";
-
 texto.style.opacity=1;
 texto.style.filter="blur(0)";
 
-},200));
-
-timers.push(setTimeout(()=>{
-
-texto.style.opacity=0;
-texto.style.filter="blur(20px)";
-
-},15000));
-
-timers.push(setTimeout(()=>{
-
-logo.style.transition="all 1s ease";
-
+setTimeout(()=>{
 logo.style.opacity=1;
 logo.style.filter="blur(0)";
+},500);
 
-},17000));
+/* LOOP TEXTO */
 
-timers.push(setTimeout(()=>{
+if(interval) clearInterval(interval);
 
-logo.style.opacity=0;
-logo.style.filter="blur(20px)";
-logo.style.transform="translateX(120px)";
+interval = setInterval(()=>{
+updateTexto();
+},1000);
 
-},33000));
-
-timers.push(setTimeout(()=>{
-
-runAnim();
-
-},240000));
-
-}
-
-function startMosca(){
-
-activo=true;
-
-clearTimers();
-
-resetVisual();
-
-setTimeout(()=>{
-runAnim();
-},50);
+updateTexto();
 
 }
 
 function stopMosca(){
 
-activo=false;
+activo = false;
 
-clearTimers();
+if(interval) clearInterval(interval);
 
-mosca.style.transition="all .8s ease";
 mosca.style.opacity=0;
 mosca.style.filter="blur(15px)";
 
 }
 
-/* ABLY */
+/* ========================= */
+/*         ABLY              */
+/* ========================= */
 
 const ably = new Ably.Realtime({
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
@@ -154,10 +197,18 @@ const channel = ably.channels.get("vmix-mosca");
 
 channel.subscribe("control",(msg)=>{
 
-const d=msg.data;
+const d = msg.data;
+
+/* ON OFF */
 
 if(d.action==="on") startMosca();
 if(d.action==="off") stopMosca();
+
+/* UPDATE HORA */
+
+if(d.action==="updateHora"){
+horaCierre = d.hora;
+}
 
 });
 
