@@ -113,7 +113,7 @@ align-items:center;
 white-space:nowrap;
 animation:tickerLoop 12s linear infinite;
 
-padding:0 20px; /* 🔥 ESTE ES EL MARGEN REAL */
+gap:10px; /* 🔥 ESTE ES EL MARGEN REAL */
 }
 
 .text{
@@ -126,5 +126,5 @@ padding:0 5px; /* aire entre repeticiones */
 
 @keyframes tickerLoop{
 0%{ transform:translateX(0); }
-100%{ transform:translateX(calc(-50% - 40px)); }
+100%{ transform:translateX(-50%); }
 }
