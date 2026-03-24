@@ -142,4 +142,17 @@ if(d.action==="updateLoop"){
 minutosLoop = parseInt(d.minutos || 0);
 }
 
+  const loopMin = document.getElementById("loopMin");
+
+function enviarLoop(){
+channel.publish("control",{
+action:"updateLoop",
+minutos: loopMin.value
+});
+}
+
+loopMin.addEventListener("change", enviarLoop);
+
+window.addEventListener("load", enviarLoop);
+
 });
