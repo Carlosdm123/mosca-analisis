@@ -107,59 +107,75 @@ function startMosca(){
 activo = true;
 calcularCierre();
 
-/* RESET */
+/* RESET LIMPIO */
 
-texto.style.opacity=0;
-logo.style.opacity=0;
-logoEE.style.opacity=0;
+texto.style.opacity = 0;
+texto.style.filter = "blur(20px)";
+
+logo.style.opacity = 0;
+logo.style.filter = "blur(20px)";
+
+logoEE.style.opacity = 0;
 
 const mask = logoEE.querySelector(".circle-mask");
-mask.style.clipPath="circle(0%)";
-mask.style.background="white";
+mask.style.clipPath = "circle(0% at 50% 50%)";
+mask.style.background = "white";
 
 /* CONTENEDOR */
 
-mosca.style.opacity=1;
+mosca.style.opacity = 1;
+mosca.style.filter = "blur(0)";
 
-/* TEXTO */
+/* TEXTO ENTRA */
 
 setTimeout(()=>{
-texto.style.opacity=1;
+texto.style.opacity = 1;
+texto.style.filter = "blur(0)";
 },200);
 
+/* TEXTO SALE */
+
 setTimeout(()=>{
-texto.style.opacity=0;
+texto.style.opacity = 0;
+texto.style.filter = "blur(20px)";
 },20000);
 
-/* LOGO */
+/* LOGO ENTRA */
 
 setTimeout(()=>{
-logo.style.opacity=1;
+logo.style.opacity = 1;
+logo.style.filter = "blur(0)";
 },21500);
 
+/* LOGO SALE */
+
 setTimeout(()=>{
-logo.style.opacity=0;
+logo.style.opacity = 0;
+logo.style.filter = "blur(20px)";
 },37500);
 
-/* LOGO EE */
+/* LOGO EE ENTRA */
 
 setTimeout(()=>{
-logoEE.style.opacity=1;
-mask.style.clipPath="circle(60%)";
+logoEE.style.opacity = 1;
+
+mask.style.clipPath = "circle(60% at 50% 50%)";
 
 setTimeout(()=>{
-mask.style.background="transparent";
+mask.style.background = "transparent";
 },400);
 
 },39000);
 
+/* LOGO EE SALE */
+
 setTimeout(()=>{
-mask.style.background="white";
-mask.style.clipPath="circle(0%)";
+mask.style.background = "white";
+mask.style.clipPath = "circle(0% at 50% 50%)";
 },55000);
 
 setTimeout(()=>{
-logoEE.style.opacity=0;
+logoEE.style.opacity = 0;
 },56000);
 
 /* LOOP */
@@ -184,7 +200,8 @@ activo = false;
 
 if(interval) clearInterval(interval);
 
-mosca.style.opacity=0;
+mosca.style.opacity = 0;
+mosca.style.filter = "blur(15px)";
 
 }
 
