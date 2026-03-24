@@ -19,24 +19,20 @@ height:100vh;
 margin:0;
 }
 
-/* PREVIEW */
-
 #preview{
 width:960px;
 height:540px;
 border:1px solid #444;
 overflow:hidden;
-position:relative;
 margin-bottom:30px;
 }
 
 #preview iframe{
-position:absolute;
 width:1920px;
 height:1080px;
-border:none;
 transform:scale(.5);
 transform-origin:top left;
+border:none;
 }
 
 /* SWITCH */
@@ -50,8 +46,6 @@ height:34px;
 
 .switch input{
 opacity:0;
-width:0;
-height:0;
 }
 
 .slider{
@@ -62,20 +56,19 @@ left:0;
 right:0;
 bottom:0;
 background:#444;
-transition:.3s;
 border-radius:34px;
 }
 
 .slider:before{
-position:absolute;
 content:"";
+position:absolute;
 height:26px;
 width:26px;
 left:4px;
 bottom:4px;
 background:white;
-transition:.3s;
 border-radius:50%;
+transition:.3s;
 }
 
 input:checked + .slider{
@@ -86,7 +79,7 @@ input:checked + .slider:before{
 transform:translateX(36px);
 }
 
-/* INPUT HORA */
+/* HORA */
 
 .hora-box{
 margin-top:20px;
@@ -101,17 +94,8 @@ font-size:16px;
 }
 
 .status{
-font-size:14px;
 color:#00e676;
-}
-
-/* CONTROLES */
-
-.controls{
-display:flex;
-flex-direction:column;
-gap:15px;
-align-items:center;
+font-size:14px;
 }
 
 </style>
@@ -124,8 +108,6 @@ align-items:center;
 <iframe src="mosca-overlay.html"></iframe>
 </div>
 
-<div class="controls">
-
 <label class="switch">
 <input type="checkbox" id="toggle">
 <span class="slider"></span>
@@ -135,8 +117,6 @@ align-items:center;
 <label>CIERRE:</label>
 <input type="time" id="hora" value="16:00">
 <span id="status" class="status"></span>
-</div>
-
 </div>
 
 <script>
@@ -155,17 +135,15 @@ const status = document.getElementById("status");
 
 toggle.addEventListener("change",()=>{
 
-if(toggle.checked){
-channel.publish("control",{action:"on"});
-}else{
-channel.publish("control",{action:"off"});
-}
+channel.publish("control",{
+action: toggle.checked ? "on" : "off"
+});
 
 });
 
 /* UPDATE HORA */
 
-horaInput.addEventListener("change",()=>{
+function enviarHora(){
 
 const hora = horaInput.value;
 
@@ -174,10 +152,18 @@ action:"updateHora",
 hora:hora
 });
 
-/* feedback visual */
-
 status.innerText = "✔ " + hora;
 
+}
+
+/* CAMBIO MANUAL */
+
+horaInput.addEventListener("change", enviarHora);
+
+/* 🔥 CLAVE: ENVÍO AUTOMÁTICO AL CARGAR */
+
+window.addEventListener("load",()=>{
+enviarHora();
 });
 
 </script>
