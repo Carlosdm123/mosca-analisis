@@ -7,8 +7,6 @@ background:transparent;
 font-family:sans-serif;
 }
 
-/* CONTENEDOR */
-
 #mosca{
 position:absolute;
 top:70px;
@@ -17,8 +15,6 @@ width:600px;
 opacity:0;
 filter:blur(20px);
 }
-
-/* TEXTO */
 
 #texto{
 width:600px;
@@ -32,8 +28,6 @@ text-shadow:6px 6px 12px rgba(0,0,0,.8);
 opacity:0;
 filter:blur(20px);
 }
-
-/* LOGO */
 
 #logo{
 position:absolute;
@@ -69,16 +63,11 @@ display:flex;
 align-items:center;
 }
 
-/* TRACK */
-
 .ticker-track{
 display:flex;
-align-items:center;
 white-space:nowrap;
 animation:tickerLoop 12s linear infinite;
 }
-
-/* TEXTO */
 
 .text{
 font-size:16px;
@@ -86,8 +75,6 @@ font-weight:bold;
 color:black;
 margin-right:48px;
 }
-
-/* LOOP */
 
 @keyframes tickerLoop{
 0%{ transform:translateX(0); }
