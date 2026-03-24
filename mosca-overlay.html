@@ -45,12 +45,12 @@ function getColombiaTime(){
 
 const now = new Date();
 
-const localOffset = now.getTimezoneOffset();
-const colombiaOffset = -300;
+const colombiaStr = now.toLocaleString("en-US", {
+timeZone: "America/Bogota",
+hour12: false
+});
 
-const diff = (colombiaOffset - localOffset) * 60000;
-
-return new Date(now.getTime() + diff);
+return new Date(colombiaStr);
 
 }
 
