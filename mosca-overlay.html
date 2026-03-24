@@ -8,9 +8,7 @@
 
 <style>
 
-/* ========================= */
-/* BASE                      */
-/* ========================= */
+/* BASE */
 
 body{
 margin:0;
@@ -21,9 +19,7 @@ background:transparent;
 font-family:sans-serif;
 }
 
-/* ========================= */
-/* CONTENEDOR               */
-/* ========================= */
+/* CONTENEDOR */
 
 #mosca{
 position:absolute;
@@ -35,9 +31,7 @@ filter:blur(20px);
 transition:all .6s ease;
 }
 
-/* ========================= */
-/* TEXTO                     */
-/* ========================= */
+/* TEXTO */
 
 #texto{
 width:600px;
@@ -49,15 +43,12 @@ text-transform:uppercase;
 
 opacity:0;
 filter:blur(20px);
-
 transition:all .8s ease;
 
 text-shadow:6px 6px 12px rgba(0,0,0,.8);
 }
 
-/* ========================= */
-/* LOGO PRINCIPAL            */
-/* ========================= */
+/* LOGO PRINCIPAL */
 
 #logo{
 position:absolute;
@@ -75,9 +66,7 @@ transition:all .8s ease;
 height:120px;
 }
 
-/* ========================= */
-/* LOGO EE (CIRCULAR)        */
-/* ========================= */
+/* LOGO EE (AJUSTADO) */
 
 #logoEE{
 position:absolute;
@@ -89,8 +78,8 @@ justify-content:flex-end;
 }
 
 .circle-mask{
-width:90px;
-height:90px;
+width:105px;  /* 🔥 MÁS GRANDE */
+height:105px;
 background:white;
 border-radius:50%;
 display:flex;
@@ -109,15 +98,14 @@ object-fit:cover;
 border-radius:50%;
 }
 
-/* ========================= */
-/* TICKER                    */
-/* ========================= */
+/* TICKER (AJUSTADO) */
 
 #ticker{
 width:230px;
 height:31px;
 background:white;
 margin-top:6px;
+margin-right:12px; /* 🔥 MOVIDO A LA IZQUIERDA */
 overflow:hidden;
 display:flex;
 align-items:center;
@@ -172,9 +160,7 @@ margin-right:48px;
 
 <script>
 
-/* ========================= */
-/* ELEMENTOS                 */
-/* ========================= */
+/* ELEMENTOS */
 
 const mosca = document.getElementById("mosca");
 const texto = document.getElementById("texto");
@@ -187,9 +173,7 @@ let horaCierre = "16:00";
 let interval = null;
 let cierreTsGlobal = null;
 
-/* ========================= */
-/* CALCULAR CIERRE           */
-/* ========================= */
+/* CALCULAR CIERRE */
 
 function calcularCierre(){
 
@@ -220,9 +204,7 @@ cierreTsGlobal = nowTs + (diffMinutes * 60 * 1000);
 
 }
 
-/* ========================= */
-/* FORMATO TIEMPO            */
-/* ========================= */
+/* FORMATO TIEMPO */
 
 function formatTime(sec){
 
@@ -238,9 +220,7 @@ return String(h).padStart(2,"0")+":"+
 
 }
 
-/* ========================= */
-/* TEXTO DINÁMICO            */
-/* ========================= */
+/* TEXTO DINÁMICO */
 
 function updateTexto(){
 
@@ -273,9 +253,7 @@ ELECTORALES 2026
 
 }
 
-/* ========================= */
-/* ANIMACIÓN                 */
-/* ========================= */
+/* ANIMACIÓN */
 
 function startMosca(){
 
@@ -371,9 +349,7 @@ mosca.style.filter = "blur(15px)";
 
 }
 
-/* ========================= */
-/* ABLY                      */
-/* ========================= */
+/* ABLY */
 
 const ably = new Ably.Realtime({
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4"
