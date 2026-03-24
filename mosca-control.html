@@ -150,12 +150,28 @@ background:#333;
 <span class="slider"></span>
 </label>
 
+<div>Cierre de votaciones en:</div>
+
 <div class="hora-box">
-<label>CIERRE:</label>
 <input type="time" id="hora" value="16:00">
 <span id="status" class="status"></span>
 </div>
 
+  <div style="margin-top:15px;">
+Reiniciar animación de logos cada (minutos)
+</div>
+
+<div class="hora-box">
+<select id="loopMin">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+</select>
+</div>
+  
 <!-- 🔥 BOTONES NUEVOS -->
 <div class="botones">
 <button id="abrirOverlay">Abrir overlay</button>
