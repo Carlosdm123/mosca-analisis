@@ -53,38 +53,34 @@ function calcularCierre(){
 
 const now = new Date();
 
-/* hora actual en Colombia */
-const colombia = new Intl.DateTimeFormat('en-US', {
-timeZone: 'America/Bogota',
-hour: '2-digit',
-minute: '2-digit',
-hour12: false
-}).format(now);
+/* 🔥 obtener hora real de Colombia como fecha */
+const colombiaNow = new Date(
+now.toLocaleString("en-US", { timeZone: "America/Bogota" })
+);
 
-const [currentH, currentM] = colombia.split(":").map(Number);
+/* construir fecha de cierre HOY en Colombia */
+const cierre = new Date(colombiaNow);
+
 const [h, m] = horaCierre.split(":").map(Number);
 
-const nowTs = Date.now();
+cierre.setHours(h);
+cierre.setMinutes(m);
+cierre.setSeconds(0);
+cierre.setMilliseconds(0);
 
-const currentMinutes = currentH * 60 + currentM;
-const cierreMinutes = h * 60 + m;
+/* diferencia real */
+let diffMs = cierre - colombiaNow;
 
-let diffMinutes = cierreMinutes - currentMinutes;
-
-/* 🔥 CLAVE: NO REBOTAR A MAÑANA */
-if(diffMinutes < 0){
-cierreTsGlobal = nowTs - 1000; // fuerza estado cerrado
+/* 🔥 SI YA PASÓ → NO MANDAR A MAÑANA */
+if(diffMs <= 0){
+cierreTsGlobal = Date.now() - 1000;
 return;
 }
 
-/* cálculo normal */
-cierreTsGlobal = nowTs + (diffMinutes * 60 * 1000);
+/* convertir a timestamp real */
+cierreTsGlobal = Date.now() + diffMs;
 
 }
-
-/* ========================= */
-/* FORMATO TIEMPO            */
-/* ========================= */
 
 function formatTime(sec){
 
