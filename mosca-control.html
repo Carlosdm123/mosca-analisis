@@ -6,7 +6,6 @@
 <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
 
 <style>
-
 body{
 font-family:sans-serif;
 background:#111;
@@ -34,8 +33,6 @@ transform:scale(.5);
 transform-origin:top left;
 border:none;
 }
-
-/* SWITCH */
 
 .switch{
 position:relative;
@@ -79,8 +76,6 @@ input:checked + .slider:before{
 transform:translateX(36px);
 }
 
-/* HORA */
-
 .hora-box{
 margin-top:20px;
 display:flex;
@@ -97,7 +92,6 @@ font-size:16px;
 color:#00e676;
 font-size:14px;
 }
-
 </style>
 
 </head>
@@ -131,17 +125,11 @@ const toggle = document.getElementById("toggle");
 const horaInput = document.getElementById("hora");
 const status = document.getElementById("status");
 
-/* ON OFF */
-
 toggle.addEventListener("change",()=>{
-
 channel.publish("control",{
 action: toggle.checked ? "on" : "off"
 });
-
 });
-
-/* ENVIAR HORA */
 
 function enviarHora(){
 
@@ -156,11 +144,7 @@ status.innerText = "✔ " + hora;
 
 }
 
-/* CAMBIO MANUAL */
-
 horaInput.addEventListener("change", enviarHora);
-
-/* AUTO ENVÍO */
 
 window.addEventListener("load",()=>{
 enviarHora();
