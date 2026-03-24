@@ -6,12 +6,13 @@ const logoEE = document.getElementById("logoEE");
 let activo = false;
 let horaCierre = "16:00";
 let interval = null;
+let cierreTsGlobal = null;
 
 /* ========================= */
-/*   TIMESTAMP CIERRE REAL   */
+/* CALCULAR CIERRE           */
 /* ========================= */
 
-function getCierreTimestamp(){
+function calcularCierre(){
 
 const now = new Date();
 
@@ -36,12 +37,12 @@ if(diffMinutes < -1){
 diffMinutes += 1440;
 }
 
-return nowTs + (diffMinutes * 60 * 1000);
+cierreTsGlobal = nowTs + (diffMinutes * 60 * 1000);
 
 }
 
 /* ========================= */
-/*   FORMATO TIEMPO          */
+/* FORMATO TIEMPO            */
 /* ========================= */
 
 function formatTime(sec){
@@ -59,15 +60,15 @@ return String(h).padStart(2,"0")+":"+
 }
 
 /* ========================= */
-/*     UPDATE TEXTO          */
+/* UPDATE TEXTO              */
 /* ========================= */
 
 function updateTexto(){
 
-const nowTs = Date.now();
-const cierreTs = getCierreTimestamp();
+if(!cierreTsGlobal) return;
 
-let diff = Math.floor((cierreTs - nowTs)/1000);
+const nowTs = Date.now();
+let diff = Math.floor((cierreTsGlobal - nowTs)/1000);
 
 if(diff > 0){
 
@@ -98,91 +99,67 @@ ELECTORALES 2026
 }
 
 /* ========================= */
-/*        ANIMACIÓN          */
+/* ANIMACIÓN                 */
 /* ========================= */
 
 function startMosca(){
 
 activo = true;
-
-/* TRANSICIONES */
-
-mosca.style.transition="all .6s ease";
-texto.style.transition="all .8s ease";
-logo.style.transition="all .8s ease";
+calcularCierre();
 
 /* RESET */
 
 texto.style.opacity=0;
-texto.style.filter="blur(20px)";
-
 logo.style.opacity=0;
-logo.style.filter="blur(20px)";
-
 logoEE.style.opacity=0;
-logoEE.querySelector(".circle-mask").style.clipPath="circle(0% at 50% 50%)";
 
-/* ENTRA CONTENEDOR */
+const mask = logoEE.querySelector(".circle-mask");
+mask.style.clipPath="circle(0%)";
+mask.style.background="white";
+
+/* CONTENEDOR */
 
 mosca.style.opacity=1;
-mosca.style.filter="blur(0)";
 
-/* TEXTO ENTRA */
+/* TEXTO */
 
 setTimeout(()=>{
 texto.style.opacity=1;
-texto.style.filter="blur(0)";
 },200);
-
-/* TEXTO SALE (20s) */
 
 setTimeout(()=>{
 texto.style.opacity=0;
-texto.style.filter="blur(20px)";
 },20000);
 
-/* LOGO ENTRA */
+/* LOGO */
 
 setTimeout(()=>{
 logo.style.opacity=1;
-logo.style.filter="blur(0)";
 },21500);
-
-/* LOGO SALE (16s) */
 
 setTimeout(()=>{
 logo.style.opacity=0;
-logo.style.filter="blur(20px)";
 },37500);
 
-/* LOGO EE ENTRA */
+/* LOGO EE */
 
 setTimeout(()=>{
-
-logoEE.style.opacity = 1;
-
-const mask = logoEE.querySelector(".circle-mask");
-mask.style.clipPath = "circle(60% at 50% 50%)";
-
-/* quitar fondo blanco después de abrir */
+logoEE.style.opacity=1;
+mask.style.clipPath="circle(60%)";
 
 setTimeout(()=>{
-mask.style.background = "transparent";
+mask.style.background="transparent";
 },400);
 
 },39000);
 
-/* LOGO EE SALE */
-
 setTimeout(()=>{
-
-const mask = logoEE.querySelector(".circle-mask");
-mask.style.clipPath = "circle(0% at 50% 50%)";
-
+mask.style.background="white";
+mask.style.clipPath="circle(0%)";
 },55000);
 
 setTimeout(()=>{
-logoEE.style.opacity = 0;
+logoEE.style.opacity=0;
 },56000);
 
 /* LOOP */
@@ -190,9 +167,6 @@ logoEE.style.opacity = 0;
 setTimeout(()=>{
 if(activo) startMosca();
 },65000);
-
-       mask.style.background = "white";
-mask.style.clipPath = "circle(0% at 50% 50%)";
 
 /* CONTADOR */
 
@@ -202,9 +176,7 @@ updateTexto();
 
 }
 
-/* ========================= */
-/*        STOP               */
-/* ========================= */
+/* STOP */
 
 function stopMosca(){
 
@@ -213,17 +185,15 @@ activo = false;
 if(interval) clearInterval(interval);
 
 mosca.style.opacity=0;
-mosca.style.filter="blur(15px)";
 
 }
 
 /* ========================= */
-/*         ABLY              */
+/* ABLY                      */
 /* ========================= */
 
 const ably = new Ably.Realtime({
-key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4",
-recover:true
+key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4"
 });
 
 const channel = ably.channels.get("vmix-mosca");
@@ -237,6 +207,7 @@ if(d.action==="off") stopMosca();
 
 if(d.action==="updateHora"){
 horaCierre = d.hora;
+calcularCierre();
 updateTexto();
 }
 
