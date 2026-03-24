@@ -8,10 +8,6 @@
 
 <style>
 
-/* ========================= */
-/* BASE                      */
-/* ========================= */
-
 body{
 margin:0;
 width:1920px;
@@ -20,10 +16,6 @@ overflow:hidden;
 background:transparent;
 font-family:sans-serif;
 }
-
-/* ========================= */
-/* CONTENEDOR               */
-/* ========================= */
 
 #mosca{
 position:absolute;
@@ -35,10 +27,6 @@ filter:blur(20px);
 transition:all .6s ease;
 }
 
-/* ========================= */
-/* TEXTO                     */
-/* ========================= */
-
 #texto{
 width:600px;
 text-align:right;
@@ -46,18 +34,12 @@ color:#ffffff;
 font-size:36px;
 font-weight:bold;
 text-transform:uppercase;
-
 opacity:0;
 filter:blur(20px);
 transition:all .8s ease;
-
 line-height:1.05;
 text-shadow:6px 6px 12px rgba(0,0,0,.8);
 }
-
-/* ========================= */
-/* LOGO PRINCIPAL            */
-/* ========================= */
 
 #logo{
 position:absolute;
@@ -72,12 +54,8 @@ transition:all .8s ease;
 }
 
 #logo img{
-height:110px; /* 🔥 ligeramente ajustado */
+height:110px;
 }
-
-/* ========================= */
-/* LOGO EE                   */
-/* ========================= */
 
 #logoEE{
 position:absolute;
@@ -97,7 +75,6 @@ display:flex;
 align-items:center;
 justify-content:center;
 overflow:hidden;
-
 clip-path:circle(0% at 50% 50%);
 transition:clip-path .7s ease, background .4s ease;
 }
@@ -108,10 +85,6 @@ height:100%;
 object-fit:cover;
 border-radius:50%;
 }
-
-/* ========================= */
-/* TICKER (AJUSTADO FINO)    */
-/* ========================= */
 
 #ticker{
 width:210px;
@@ -181,12 +154,45 @@ const mosca = document.getElementById("mosca");
 const texto = document.getElementById("texto");
 const logo = document.getElementById("logo");
 const logoEE = document.getElementById("logoEE");
-const mask = logoEE.querySelector(".circle-mask");
 
 let activo = false;
 let horaCierre = "16:00";
 let interval = null;
 let cierreTsGlobal = null;
+
+let timeouts = [];
+let minutosLoop = 0;
+
+/* ========================= */
+/* RESET TOTAL               */
+/* ========================= */
+
+function resetMosca(){
+
+timeouts.forEach(t=>clearTimeout(t));
+timeouts = [];
+
+if(interval){
+clearInterval(interval);
+interval = null;
+}
+
+texto.style.opacity = 0;
+texto.style.filter = "blur(20px)";
+
+logo.style.opacity = 0;
+logo.style.filter = "blur(20px)";
+
+logoEE.style.opacity = 0;
+
+const mask = logoEE.querySelector(".circle-mask");
+mask.style.clipPath = "circle(0% at 50% 50%)";
+mask.style.background = "white";
+
+mosca.style.opacity = 0;
+mosca.style.filter = "blur(20px)";
+
+}
 
 /* ========================= */
 /* CALCULAR CIERRE           */
@@ -275,85 +281,90 @@ ELECTORALES 2026
 }
 
 /* ========================= */
-/* ANIMACIÓN                 */
+/* ANIMACIÓN CONTROLADA      */
 /* ========================= */
 
 function startMosca(){
 
+resetMosca();
 activo = true;
 calcularCierre();
-
-/* RESET */
-
-texto.style.opacity = 0;
-texto.style.filter = "blur(20px)";
-
-logo.style.opacity = 0;
-logo.style.filter = "blur(20px)";
-
-logoEE.style.opacity = 0;
-mask.style.clipPath = "circle(0%)";
-mask.style.background = "white";
-
-/* CONTENEDOR */
 
 mosca.style.opacity = 1;
 mosca.style.filter = "blur(0)";
 
+let t = 0;
+
 /* TEXTO */
 
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 texto.style.opacity = 1;
 texto.style.filter = "blur(0)";
-},200);
+}, t+200));
 
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 texto.style.opacity = 0;
 texto.style.filter = "blur(20px)";
-},20000);
+}, t+20000));
+
+t += 20000;
 
 /* LOGO */
 
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 logo.style.opacity = 1;
 logo.style.filter = "blur(0)";
-},21500);
+}, t+200));
 
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 logo.style.opacity = 0;
 logo.style.filter = "blur(20px)";
-},37500);
+}, t+20000));
+
+t += 20000;
 
 /* LOGO EE */
 
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 logoEE.style.opacity = 1;
-mask.style.clipPath = "circle(60%)";
+
+const mask = logoEE.querySelector(".circle-mask");
+mask.style.clipPath = "circle(60% at 50% 50%)";
 
 setTimeout(()=>{
 mask.style.background = "transparent";
 },400);
 
-},39000);
+}, t+200));
 
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
+const mask = logoEE.querySelector(".circle-mask");
 mask.style.background = "white";
-mask.style.clipPath = "circle(0%)";
-},55000);
+mask.style.clipPath = "circle(0% at 50% 50%)";
+}, t+10000));
 
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
 logoEE.style.opacity = 0;
-},56000);
+}, t+10500));
+
+t += 10000;
 
 /* LOOP */
 
-setTimeout(()=>{
+timeouts.push(setTimeout(()=>{
+
+if(!activo) return;
+
+let delay = minutosLoop * 60 * 1000;
+
+timeouts.push(setTimeout(()=>{
 if(activo) startMosca();
-},65000);
+}, delay));
+
+}, t));
 
 /* CONTADOR */
 
-if(interval) clearInterval(interval);
 interval = setInterval(updateTexto,1000);
 updateTexto();
 
@@ -362,14 +373,8 @@ updateTexto();
 /* STOP */
 
 function stopMosca(){
-
 activo = false;
-
-if(interval) clearInterval(interval);
-
-mosca.style.opacity = 0;
-mosca.style.filter = "blur(15px)";
-
+resetMosca();
 }
 
 /* ========================= */
@@ -386,13 +391,25 @@ channel.subscribe("control",(msg)=>{
 
 const d = msg.data;
 
-if(d.action==="on") startMosca();
-if(d.action==="off") stopMosca();
+/* 🔥 SIEMPRE REINICIO LIMPIO */
+
+if(d.action==="on"){
+stopMosca();
+setTimeout(()=>startMosca(),50);
+}
+
+if(d.action==="off"){
+stopMosca();
+}
 
 if(d.action==="updateHora"){
 horaCierre = d.hora;
 calcularCierre();
 updateTexto();
+}
+
+if(d.action==="updateLoop"){
+minutosLoop = parseInt(d.minutos || 0);
 }
 
 });
