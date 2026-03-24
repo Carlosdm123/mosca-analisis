@@ -13,7 +13,6 @@ top:70px;
 right:80px;
 width:600px;
 opacity:0;
-filter:blur(20px);
 }
 
 #texto{
@@ -23,10 +22,7 @@ color:#ffffff;
 font-size:36px;
 font-weight:bold;
 text-transform:uppercase;
-line-height:1.05;
-text-shadow:6px 6px 12px rgba(0,0,0,.8);
 opacity:0;
-filter:blur(20px);
 }
 
 #logo{
@@ -34,7 +30,6 @@ position:absolute;
 top:0;
 right:0;
 opacity:0;
-filter:blur(20px);
 display:flex;
 flex-direction:column;
 align-items:flex-end;
@@ -51,44 +46,31 @@ position:absolute;
 top:0;
 right:0;
 opacity:0;
-display:flex;
-justify-content:flex-end;
 }
 
 .circle-mask{
-width:90px; /* ↓ más pequeño */
+width:90px;
 height:90px;
 background:white;
 border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
 overflow:hidden;
-clip-path:circle(0% at 50% 50%);
-transition:clip-path .7s ease, background .4s ease;
+clip-path:circle(0%);
+transition:.7s;
 }
 
 .circle-mask img{
 width:100%;
 height:100%;
 object-fit:cover;
-border-radius:50%;
 }
 
 /* TICKER */
 
-:root{
---ticker-right:16px;
---ticker-width:230px;
---ticker-height:31px;
-}
-
 #ticker{
-width:var(--ticker-width);
-height:var(--ticker-height);
+width:230px;
+height:31px;
 background:white;
 margin-top:6px;
-margin-right:var(--ticker-right);
 overflow:hidden;
 display:flex;
 align-items:center;
@@ -96,7 +78,6 @@ align-items:center;
 
 .ticker-track{
 display:flex;
-white-space:nowrap;
 animation:tickerLoop 12s linear infinite;
 }
 
