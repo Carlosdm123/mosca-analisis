@@ -53,6 +53,7 @@ function calcularCierre(){
 
 const now = new Date();
 
+/* hora actual en Colombia */
 const colombia = new Intl.DateTimeFormat('en-US', {
 timeZone: 'America/Bogota',
 hour: '2-digit',
@@ -70,10 +71,13 @@ const cierreMinutes = h * 60 + m;
 
 let diffMinutes = cierreMinutes - currentMinutes;
 
-if(diffMinutes < -1){
-diffMinutes += 1440;
+/* 🔥 CLAVE: SI YA PASÓ, NO LO MANDES A MAÑANA */
+if(diffMinutes < 0){
+cierreTsGlobal = nowTs - 1000; // fuerza estado "cerrado"
+return;
 }
 
+/* cálculo normal */
 cierreTsGlobal = nowTs + (diffMinutes * 60 * 1000);
 
 }
