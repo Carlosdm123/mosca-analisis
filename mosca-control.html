@@ -37,10 +37,9 @@ border:none;
 }
 
 .switch{
-position:relative;
-display:inline-block;
 width:70px;
 height:34px;
+position:relative;
 margin-bottom:20px;
 }
 
@@ -134,14 +133,11 @@ action: toggle.checked ? "on" : "off"
 });
 
 function enviarHora(){
-
 channel.publish("control",{
 action:"updateHora",
 hora:horaInput.value
 });
-
 status.innerText = "✔ " + horaInput.value;
-
 }
 
 horaInput.addEventListener("change", enviarHora);
