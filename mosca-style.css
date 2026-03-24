@@ -56,8 +56,8 @@ justify-content:flex-end;
 }
 
 .circle-mask{
-width:120px;
-height:120px;
+width:90px; /* ↓ más pequeño */
+height:90px;
 background:white;
 border-radius:50%;
 display:flex;
@@ -65,7 +65,7 @@ align-items:center;
 justify-content:center;
 overflow:hidden;
 clip-path:circle(0% at 50% 50%);
-transition:clip-path .8s ease;
+transition:clip-path .7s ease, background .4s ease;
 }
 
 .circle-mask img{
