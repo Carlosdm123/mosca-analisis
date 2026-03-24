@@ -98,8 +98,11 @@ box-sizing:border-box;
 
 .ticker-track{
 display:flex;
+align-items:center;
 white-space:nowrap;
 animation:tickerLoop 12s linear infinite;
+padding-left:10px;   /* 🔥 aire al inicio */
+padding-right:10px;  /* 🔥 aire al final */
 }
 
 .text{
@@ -107,7 +110,7 @@ font-size:14px;
 font-weight:bold;
 color:black;
 margin-right:36px;
-padding:0 5px; /* 🔥 aire interno horizontal */
+padding:0 5px; /* aire entre repeticiones */
 }
 
 @keyframes tickerLoop{
