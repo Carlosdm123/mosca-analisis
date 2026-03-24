@@ -44,8 +44,6 @@ align-items:flex-end;
 height:120px;
 }
 
-/* TICKER */
-
 :root{
 --ticker-right:16px;
 --ticker-width:230px;
