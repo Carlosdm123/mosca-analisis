@@ -10,7 +10,7 @@ font-family:sans-serif;
 /* CONTROLES DEL TICKER */
 
 :root{
---ticker-right: 26px;
+--ticker-right: 16px; /* ← movido 10px a la derecha */
 --ticker-width: 230px;
 --ticker-height: 31px;
 }
@@ -26,16 +26,16 @@ opacity:0;
 filter:blur(20px);
 }
 
-/* TEXTO */
+/* TEXTO PRINCIPAL */
 
 #texto{
 width:600px;
 text-align:right;
 color:#ffffff;
-font-size:44px;
+font-size:36px; /* ← más pequeño */
 font-weight:bold;
 text-transform:uppercase;
-line-height:1.1;
+line-height:1.05;
 text-shadow:6px 6px 12px rgba(0,0,0,.8);
 opacity:0;
 filter:blur(20px);
@@ -58,52 +58,45 @@ align-items:flex-end;
 height:120px;
 }
 
-/* TICKER */
+/* ========================= */
+/*        TICKER PRO         */
+/* ========================= */
 
 #ticker{
-
 width:var(--ticker-width);
 height:var(--ticker-height);
-
 background:white;
-
 margin-top:6px;
 margin-right:var(--ticker-right);
-
 overflow:hidden;
-
 display:flex;
 align-items:center;
-
 }
 
-/* TEXTO */
+/* TRACK INFINITO */
 
-#ticker span{
-
+.ticker-track{
+display:flex;
 white-space:nowrap;
+animation:tickerLoop 12s linear infinite;
+}
 
+/* TEXTO DEL TICKER */
+
+.ticker-track span{
 font-size:16px;
 font-weight:bold;
-
 color:black;
-
-padding-left:10px;
-
-animation:tickerMove 12s linear infinite;
-
+padding-right:40px; /* espacio entre bloques */
 }
 
-/* ANIMACION */
+/* ANIMACIÓN CONTINUA REAL */
 
-@keyframes tickerMove{
-
+@keyframes tickerLoop{
 0%{
-transform:translateX(200px);
+transform:translateX(0);
 }
-
 100%{
-transform:translateX(-100%);
+transform:translateX(-50%);
 }
-
 }
