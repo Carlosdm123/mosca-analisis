@@ -18,6 +18,19 @@ height:100vh;
 margin:0;
 }
 
+/* 🔵 INDICADOR WEBSOCKET */
+#ws-indicator{
+position:absolute;
+top:20px;
+left:20px;
+width:12px;
+height:12px;
+border-radius:50%;
+background:red;
+}
+
+/* ========================= */
+
 #preview{
 width:960px;
 height:540px;
@@ -83,21 +96,50 @@ gap:10px;
 align-items:center;
 }
 
+/* 🔥 ICONO TIME EN BLANCO */
 input[type="time"]{
 padding:8px;
 background:#000;
 color:white;
 border:1px solid #333;
+
+/* icono blanco */
+color-scheme: dark;
+filter: invert(1);
 }
 
 .status{
 color:#00e676;
+}
+
+/* ========================= */
+/* BOTONES NUEVOS            */
+/* ========================= */
+
+.botones{
+margin-top:20px;
+display:flex;
+gap:10px;
+}
+
+.botones button{
+padding:10px 14px;
+background:#222;
+color:white;
+border:1px solid #444;
+cursor:pointer;
+}
+
+.botones button:hover{
+background:#333;
 }
 </style>
 
 </head>
 
 <body>
+
+<div id="ws-indicator"></div>
 
 <div id="preview">
 <iframe src="mosca-overlay.html"></iframe>
@@ -114,13 +156,51 @@ color:#00e676;
 <span id="status" class="status"></span>
 </div>
 
+<!-- 🔥 BOTONES NUEVOS -->
+<div class="botones">
+<button id="abrirOverlay">Abrir overlay</button>
+<button id="copiarOverlay">Copiar URL overlay</button>
+</div>
+
 <script>
 
-const ably = new Ably.Realtime({
+const overlayURL = window.location.href.replace("mosca-control.html","mosca-overlay.html");
+
+/* ========================= */
+/* ABLY + AUTO RECONEXION    */
+/* ========================= */
+
+let ably = new Ably.Realtime({
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4"
 });
 
-const channel = ably.channels.get("vmix-mosca");
+let channel = ably.channels.get("vmix-mosca");
+
+const indicator = document.getElementById("ws-indicator");
+
+function setIndicator(color){
+indicator.style.background = color;
+}
+
+ably.connection.on("connected", ()=>{
+setIndicator("#00e676"); // verde
+});
+
+ably.connection.on("connecting", ()=>{
+setIndicator("orange");
+});
+
+ably.connection.on("disconnected", ()=>{
+setIndicator("red");
+});
+
+ably.connection.on("suspended", ()=>{
+setIndicator("red");
+});
+
+/* ========================= */
+/* CONTROLES EXISTENTES      */
+/* ========================= */
 
 const toggle = document.getElementById("toggle");
 const horaInput = document.getElementById("hora");
@@ -143,6 +223,18 @@ status.innerText = "✔ " + horaInput.value;
 horaInput.addEventListener("change", enviarHora);
 
 window.addEventListener("load", enviarHora);
+
+/* ========================= */
+/* BOTONES NUEVOS            */
+/* ========================= */
+
+document.getElementById("abrirOverlay").onclick = ()=>{
+window.open(overlayURL, "_blank");
+};
+
+document.getElementById("copiarOverlay").onclick = ()=>{
+navigator.clipboard.writeText(overlayURL);
+};
 
 </script>
 
