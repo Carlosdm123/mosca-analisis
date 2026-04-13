@@ -12,9 +12,7 @@ let interval = null;
 let timeouts = [];
 let minutosLoop = 0;
 
-/* ========================= */
-/* RESET TOTAL               */
-/* ========================= */
+/* RESET */
 
 function resetMosca(){
 
@@ -44,12 +42,9 @@ mosca.style.opacity = 0;
 mosca.style.filter = "blur(20px)";
 }
 
-/* ========================= */
-/* FORMATO TIEMPO            */
-/* ========================= */
+/* TIEMPO */
 
 function formatTime(sec){
-
 sec = Math.max(0, sec);
 
 let h = Math.floor(sec/3600);
@@ -59,57 +54,40 @@ let s = sec%60;
 return String(h).padStart(2,"0")+":"+
        String(m).padStart(2,"0")+":"+
        String(s).padStart(2,"0");
-
 }
 
-/* ========================= */
-/* TEXTO DINÁMICO (FIX REAL) */
-/* ========================= */
+/* TEXTO */
 
 function updateTexto(){
 
 const now = new Date();
 
-/* hora real en Colombia */
 const colombiaNow = new Date(
 now.toLocaleString("en-US", { timeZone: "America/Bogota" })
 );
 
-/* tiempo actual en segundos */
 const nowSec =
 colombiaNow.getHours() * 3600 +
 colombiaNow.getMinutes() * 60 +
 colombiaNow.getSeconds();
 
-/* hora cierre */
 const [h, m] = horaCierre.split(":").map(Number);
 const cierreSec = (h * 3600) + (m * 60);
 
-/* diferencia */
 let diff = cierreSec - nowSec;
 
-/* lógica */
 if(diff > 0){
-
 texto.innerHTML = `CIERRE DE VOTACIONES EN:<br>${formatTime(diff)}`;
-
 }
-else if(diff <= 0 && diff > -60){
-
+else if(diff > -60){
 texto.innerHTML = `VOTACIONES CERRADAS`;
-
 }
 else{
-
 texto.innerHTML = `ANÁLISIS DE RESULTADOS<br>ELECTORALES 2026`;
-
+}
 }
 
-}
-
-/* ========================= */
-/* ANIMACIÓN                 */
-/* ========================= */
+/* ANIMACIÓN */
 
 function startMosca(){
 
@@ -126,7 +104,6 @@ mosca.style.filter = "blur(0)";
 let t = 0;
 
 /* TEXTO */
-
 timeouts.push(setTimeout(()=>{
 texto.style.opacity = 1;
 texto.style.filter = "blur(0)";
@@ -140,7 +117,6 @@ texto.style.filter = "blur(20px)";
 t += 20000;
 
 /* LOGO */
-
 timeouts.push(setTimeout(()=>{
 logo.style.opacity = 1;
 logo.style.filter = "blur(0)";
@@ -154,7 +130,6 @@ logo.style.filter = "blur(20px)";
 t += 20000;
 
 /* LOGO EE */
-
 timeouts.push(setTimeout(()=>{
 logoEE.style.opacity = 1;
 
@@ -179,13 +154,15 @@ logoEE.style.opacity = 0;
 
 t += 10000;
 
-/* LOOP */
-
+/* LOOP CONTROLADO */
 timeouts.push(setTimeout(()=>{
 
 running = false;
 
 if(!activo) return;
+
+/* 🔥 si es 0 no repite */
+if(minutosLoop <= 0) return;
 
 let delay = minutosLoop * 60 * 1000;
 
@@ -195,25 +172,20 @@ if(activo) startMosca();
 
 }, t));
 
-/* CONTADOR EN TIEMPO REAL */
+/* CONTADOR */
 
 interval = setInterval(updateTexto,1000);
 updateTexto();
-
 }
 
-/* ========================= */
-/* STOP                      */
-/* ========================= */
+/* STOP */
 
 function stopMosca(){
 activo = false;
 resetMosca();
 }
 
-/* ========================= */
-/* ABLY                      */
-/* ========================= */
+/* ABLY */
 
 const ably = new Ably.Realtime({
 key:"bOKecA.F01Gsw:f6ccqlfGnZrnTbs9ZqERdlbn7AK9PwwCtsplaep_DL4"
@@ -225,24 +197,20 @@ channel.subscribe("control",(msg)=>{
 
 const d = msg.data;
 
-/* ON */
 if(d.action==="on"){
 stopMosca();
 setTimeout(()=>startMosca(),80);
 }
 
-/* OFF */
 if(d.action==="off"){
 stopMosca();
 }
 
-/* CAMBIO HORA */
 if(d.action==="updateHora"){
 horaCierre = d.hora;
-updateTexto(); // 🔥 recalcula inmediato
+updateTexto();
 }
 
-/* LOOP */
 if(d.action==="updateLoop"){
 minutosLoop = parseInt(d.minutos || 0);
 }
